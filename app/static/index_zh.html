@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>纳滤膜智能预测平台 | NF Intelligence</title>
+<style>
+  .root-placeholder{}
+  :root{
+    /* 明亮仪器面板 —— 冷白底 + 蓝色信号 */
+    --bg:#F2F6FC;          /* 页面底 冷白 */
+    --panel:#FFFFFF;       /* 卡片 */
+    --panel-2:#F7FAFF;     /* 次级面板 */
+    --line:#DCE6F5;        /* 边框 */
+    --line-2:#EAF1FB;      /* 更浅分隔 */
+    --mg:#1668D6;          /* Mg2+ 主信号 深蓝 */
+    --mg-soft:#E4EEFC;
+    --mg-dim:#8FBAF0;
+    --li:#0E9AAE;          /* Li+ 青蓝 */
+    --li-soft:#DFF3F6;
+    --li-dim:#79CBD7;
+    --ink:#12243D;         /* 主文字 深蓝黑 */
+    --ink-2:#33496B;
+    --muted:#55688A;       /* 次要文字（对比度达 AA） */
+    --ok:#15845C; --warn:#C2410C;
+    --radius:10px;
+    --display:"Segoe UI Variable Display","PingFang SC","Microsoft YaHei",sans-serif;
+    --sans:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    --mono:"JetBrains Mono","SF Mono",Consolas,"Courier New",monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--sans);font-size:15px;line-height:1.55}
+
+/* ===== 页眉：蓝底 + 离子输运带（签名元素）===== */
+  header{background:linear-gradient(135deg,#0E4C9E 0%,#1668D6 55%,#1B7FD6 100%);
+    position:relative;overflow:hidden}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 26px}
+  header .wrap{padding-top:26px;padding-bottom:24px;position:relative;z-index:2}
+  .verify-strip{display:flex;align-items:center;gap:9px;margin-top:14px;font-size:12.5px;color:#E8F3FF}
+  .verify-dot{width:8px;height:8px;border-radius:50%;background:#A9C5E7;box-shadow:0 0 0 3px rgba(255,255,255,.12)}
+  .verify-strip.ok .verify-dot{background:#7EF0C3}
+  .transport{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.95}
+  .membrane{position:absolute;left:0;right:0;top:50%;height:2px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.35) 12%,rgba(255,255,255,.6) 50%,rgba(255,255,255,.35) 88%,transparent);
+    transform:translateY(-50%)}
+  .membrane::after{content:"";position:absolute;inset:-7px 0;
+    background:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 3px,transparent 3px 9px)}
+  .ion{position:absolute;width:7px;height:7px;border-radius:50%;top:calc(50% - 3.5px)}
+  .ion.li{background:#7FF0FF;box-shadow:0 0 10px rgba(127,240,255,.9);
+    animation:pass 5.2s linear infinite}
+  .ion.mg{background:#FFFFFF;box-shadow:0 0 10px rgba(255,255,255,.9);
+    animation:block 4.4s ease-in-out infinite}
+  @keyframes pass{0%{left:-2%;opacity:0}8%{opacity:1}92%{opacity:1}100%{left:102%;opacity:0}}
+  @keyframes block{0%{left:-2%;opacity:0}14%{opacity:1}
+    46%{left:44%;opacity:1}58%{left:39%}72%{left:44%}
+    100%{left:30%;opacity:0}}
+  @media (prefers-reduced-motion:reduce){.ion{animation:none;opacity:.6}}
+
+  .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+    color:rgba(255,255,255,.72);text-transform:uppercase;margin-bottom:8px;font-weight:500}
+  h1{font-family:var(--display);font-size:29px;font-weight:700;margin:0 0 6px;
+    letter-spacing:.01em;color:#FFFFFF;text-shadow:0 1px 2px rgba(0,0,0,.14)}
+  .sub{color:rgba(255,255,255,.9);font-size:13px;max-width:680px;line-height:1.5}
+  .ion-legend{display:flex;gap:18px;margin-top:12px;font-size:11.5px}
+  .ion-legend span{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.85)}
+  .dot{width:8px;height:8px;border-radius:50%}
+  .dot.mg{background:#FFFFFF;box-shadow:0 0 7px rgba(255,255,255,.8)}
+  .dot.li{background:#7FF0FF;box-shadow:0 0 7px rgba(127,240,255,.8)}
+
+  nav{background:rgba(255,255,255,.92);border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:20;backdrop-filter:blur(8px)}
+  .tabs{display:flex;gap:0;padding:0;overflow-x:auto}
+  .tab{padding:13px 20px;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted);
+    border-bottom:2px solid transparent;transition:color .15s,border-color .15s;
+    user-select:none;letter-spacing:.02em;white-space:nowrap}
+  .tab:hover{color:var(--ink)}
+  .tab.active{color:var(--mg);border-bottom-color:var(--mg);font-weight:700}
+  .tab:focus-visible{outline:2px solid var(--li);outline-offset:-2px}
+
+  main{padding:30px 0 10px}
+  .panel{display:none;animation:fadeUp .25s ease}
+  .panel.active{display:block}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.panel{animation:none}}
+
+  .grid{display:grid;grid-template-columns:360px 1fr;gap:24px;align-items:start}
+  @media(max-width:860px){.grid{grid-template-columns:1fr}}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;box-shadow:0 1px 3px rgba(18,36,61,.06)}
+  .card h2{font-family:var(--display);font-size:15.5px;font-weight:700;margin:0 0 16px;
+    color:var(--ink);letter-spacing:0;padding-bottom:10px;
+    border-bottom:1px solid var(--line);position:relative}
+  .card h2::after{content:"";position:absolute;left:0;bottom:-1px;width:42px;height:2px;
+    background:var(--mg)}
+
+  .field{margin-bottom:13px}
+  label{display:block;font-size:11.5px;color:var(--muted);font-weight:600;
+    margin-bottom:5px;letter-spacing:.01em}
+  input,select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:6px;
+    font-size:14px;font-family:var(--sans);background:#FFF;color:var(--ink);
+    transition:border-color .15s,box-shadow .15s}
+  input:hover,select:hover{border-color:var(--mg-dim)}
+  input:focus,select:focus{outline:none;border-color:var(--mg);
+    box-shadow:0 0 0 3px rgba(22,104,214,.13)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .btn{background:var(--mg);color:#FFF;border:none;padding:12px 20px;border-radius:6px;
+    font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:8px;
+    font-family:var(--sans);letter-spacing:.03em;transition:background .15s,box-shadow .15s}
+  .btn:hover{background:#1257B5;box-shadow:0 2px 10px rgba(22,104,214,.28)}
+  .btn:focus-visible{outline:2px solid var(--li);outline-offset:2px}
+  .btn.sec{background:#FFF;color:var(--mg);border:1px solid var(--mg)}
+  .btn.sec:hover{background:var(--mg-soft);box-shadow:none}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.5}
+
+  /* ===== 结果区 ===== */
+  .placeholder{color:var(--muted);padding:44px 20px;text-align:center;font-size:13.5px}
+  .placeholder .icon{font-size:26px;display:block;margin-bottom:10px;opacity:.5;color:var(--mg-dim)}
+  .res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px;margin-bottom:16px}
+  .metric{border:1px solid var(--line);border-radius:8px;padding:14px 16px;
+    background:var(--panel-2);position:relative;overflow:hidden}
+  .metric::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--muted)}
+  .metric.mg::before{background:var(--mg)}
+  .metric.li::before{background:var(--li)}
+  .metric .name{font-size:11.5px;color:var(--muted);letter-spacing:0;font-weight:600}
+  .metric .val{font-size:27px;font-weight:700;margin:5px 0 2px;font-variant-numeric:tabular-nums;
+    font-family:var(--display);letter-spacing:-.01em}
+  .metric.mg .val{color:var(--mg)} .metric.li .val{color:var(--li)}
+  .metric:not(.mg):not(.li) .val{color:var(--ink)}
+  .metric .unit{font-size:10.5px;color:var(--muted);font-family:var(--mono);margin-left:3px}
+  .range{margin-top:10px}
+  .range .track{height:5px;border-radius:3px;background:#EDF3FC;position:relative;
+    border:1px solid var(--line)}
+  .range .band{position:absolute;height:100%;border-radius:3px;opacity:.5}
+  .metric.mg .band{background:var(--mg)} .metric.li .band{background:var(--li)}
+  .metric:not(.mg):not(.li) .band{background:var(--muted)}
+  .range .pin{position:absolute;top:-3px;width:2px;height:11px;border-radius:1px;background:var(--ink)}
+  .range .lab{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);
+    margin-top:4px;font-family:var(--mono)}
+
+  /* 综合得分 */
+  .score-box{border:1px solid var(--mg);border-radius:var(--radius);padding:20px 24px;
+    background:linear-gradient(135deg,#FFFFFF 55%,var(--mg-soft));
+    display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .score-box .klabel{font-size:11.5px;color:var(--muted);letter-spacing:0;font-weight:600}
+  .score-box .big{font-size:42px;font-weight:700;font-variant-numeric:tabular-nums;
+    line-height:1.05;font-family:var(--display);color:var(--mg);letter-spacing:-.02em}
+  .score-note{font-size:11.5px;color:var(--muted);margin-top:9px;max-width:260px;line-height:1.5}
+
+  /* ===== 表格 ===== */
+  .tbl-wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+  th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line-2)}
+  th:first-child,td:first-child{text-align:left}
+  th{font-size:11.5px;letter-spacing:0;color:var(--ink-2);font-weight:700;
+    background:var(--panel-2);border-bottom:1px solid var(--line)}
+  tbody tr:hover td{background:var(--panel-2)}
+  tr.top td{background:var(--mg-soft);color:var(--ink)}
+  tr.top td b{color:var(--mg)}
+  .rank-badge{display:inline-block;min-width:22px;text-align:center;padding:2px 6px;
+    border-radius:4px;background:#EDF3FC;border:1px solid var(--line);
+    font-family:var(--mono);font-size:11px;color:var(--muted)}
+  tr.top .rank-badge{background:var(--mg);color:#FFF;border-color:var(--mg)}
+  /* 单体名称单元格：允许换行完整显示 */
+  td.smiles{font-family:var(--mono);font-size:10.5px;line-height:1.45;
+    white-space:normal;word-break:break-all;max-width:280px;color:var(--ink-2)}
+  td.smiles .mname{display:block;font-family:var(--sans);font-size:12px;
+    font-weight:600;color:var(--ink);word-break:normal;margin-bottom:2px}
+  .src-tag{display:inline-block;font-family:var(--mono);font-size:9px;padding:1px 5px;
+    border-radius:3px;margin-left:5px;vertical-align:1px}
+  .src-tag.ds{background:var(--li-soft);color:#0A6D7C}
+  .src-tag.lib{background:#F3EAFB;color:#7A3FA8}
+
+  /* 重要性 / SHAP 条 */
+  .imp-row{display:flex;align-items:center;gap:12px;margin-bottom:7px}
+  .imp-row .lbl{width:200px;font-size:11.5px;text-align:right;font-family:var(--mono);
+    color:var(--ink);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .imp-row .track{flex:1;height:18px;background:#E9EFF8;border-radius:3px;overflow:hidden;
+    border:1px solid var(--line)}
+  .imp-row .track i{display:block;height:100%;background:var(--mg)}
+  .imp-row .track i.pos{background:linear-gradient(90deg,#1668D6,#0B4FA8)}
+  .imp-row .track i.neg{background:linear-gradient(90deg,#E4572E,#B8341A)}
+  .imp-row .num{width:118px;font-size:11px;color:var(--muted);font-family:var(--mono)}
+
+  .note{font-size:12px;color:var(--ink-2);margin-top:16px;line-height:1.65;
+    border-left:3px solid var(--mg);padding:4px 0 4px 14px;background:var(--panel-2)}
+  footer{margin:42px 0 28px;color:var(--muted);font-size:11.5px;
+    border-top:1px solid var(--line);padding-top:16px;line-height:1.7}
+  @media(max-width:860px){
+    .grid{grid-template-columns:1fr}
+    h1{font-size:23px}
+    .imp-row .lbl{width:120px}
+    td.smiles{max-width:180px}
+  }
+  </style>
+
+  <style>
+    .language-toggle{position:absolute;right:0;top:0;display:flex;align-items:center;gap:8px;font-size:12px;color:#DCEBFF}
+    .language-toggle a{color:#FFFFFF;text-decoration:none;border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:4px 9px;font-weight:700}
+    .language-toggle a:hover{background:rgba(255,255,255,.12)}
+    .language-toggle span{font-weight:700;color:#FFFFFF}
+    .row2 .field{display:flex;flex-direction:column}.row2 .field label{min-height:36px;display:flex;align-items:flex-end}.row2 .field input,.row2 .field select{margin-top:auto}
+    @media(max-width:520px){.row2{gap:10px}.row2 .field label{font-size:11px;min-height:34px}.language-toggle{position:static;margin-bottom:12px;justify-content:flex-end}}
+  </style></head>
+<body>
+
+<header>
+  <div class="transport" aria-hidden="true">
+    <div class="membrane"></div>
+    <span class="ion li" style="animation-delay:0s"></span>
+    <span class="ion li" style="animation-delay:1.7s"></span>
+    <span class="ion li" style="animation-delay:3.4s"></span>
+    <span class="ion mg" style="animation-delay:.6s"></span>
+    <span class="ion mg" style="animation-delay:2.9s"></span>
+  </div>
+  <div class="wrap"><div class="language-toggle"><a href="/">English</a><span>简体中文</span></div>
+    <div class="eyebrow">NF Intelligence · Salt-Lake Brine</div>
+    <h1>纳滤膜智能预测平台</h1>
+    <div class="sub">输入膜配方与操作条件，预测五项分离性能，给出预测区间、镁锂平衡得分与潜力单体筛选。</div>
+    <div class="ion-legend">
+      <span><i class="dot mg"></i>Mg2+ 被截留</span>
+      <span><i class="dot li"></i>Li+ 透过</span>
+    </div>
+    <div class="verify-strip" id="verify-status" role="status" aria-live="polite">
+      <i class="verify-dot"></i><span>正在确认服务与两阶段模型状态…</span>
+    </div>
+  </div>
+</header>
+
+<nav><div class="wrap"><div class="tabs">
+  <div class="tab active" data-tab="predict" tabindex="0">单配方预测</div>
+  <div class="tab" data-tab="screen" tabindex="0">批量筛选</div>
+  <div class="tab" data-tab="monomers" tabindex="0">潜力单体筛选</div>
+  <div class="tab" data-tab="importance" tabindex="0">特征重要性</div>
+  <div class="tab" data-tab="shap" tabindex="0">SHAP 分析</div>
+  <div class="tab" data-tab="metrics" tabindex="0">模型性能</div>
+</div></div></nav>
+
+<main><div class="wrap">
+
+  <!-- ============ 单配方预测 ============ -->
+  <div class="panel active" id="panel-predict">
+    <div class="grid">
+      <div class="card">
+        <h2>膜配方输入</h2>
+        <div class="field"><label>基底膜</label><select id="membrane"></select></div>
+        <div class="field"><label>水相单体 SMILES（多胺）</label><select id="smi1"></select></div>
+        <div class="field"><label>有机相单体 SMILES（酰氯）</label><select id="smi2"></select></div>
+        <div class="row2">
+          <div class="field"><label>D₁ 水相浓度 (wt%)</label><input id="d1" type="number" step="0.05" value="0.5"></div>
+          <div class="field"><label>T₁ 浸渍时间 (s)</label><input id="t1" type="number" value="120"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>D₂ 有机相浓度 (wt%)</label><input id="d2" type="number" step="0.05" value="0.15"></div>
+          <div class="field"><label>T₂ 反应时间 (s)</label><input id="t2" type="number" value="60"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>WCA (°)</label><input id="wca" type="number" placeholder="可留空"></div>
+          <div class="field"><label>Zeta 电位 (mV)</label><input id="zeta" type="number" placeholder="可留空"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>平均孔径 (nm)</label><input id="pore" type="number" step="0.01" placeholder="可留空"></div>
+          <div class="field"><label>MWCO (Da)</label><input id="mwco" type="number" placeholder="可留空"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>厚度 (nm)</label><input id="thick" type="number" placeholder="可留空"></div>
+          <div class="field"><label>压力 (bar)</label><input id="press" type="number" value="5"></div>
+        </div>
+        <div class="field"><label>进料 (ppm)</label><input id="feed" type="number" value="1000"></div>
+        <label style="display:flex;align-items:center;gap:8px;margin:10px 0 4px;font-family:var(--sans);text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--ink);cursor:pointer">
+          <input type="checkbox" id="two-stage" style="width:auto;margin:0" checked>
+          两阶段模式：由配方自动预测膜表征（正向设计）
+        </label>
+        <button class="btn" onclick="doPredict()">预测性能</button>
+        <div class="hint">勾选两阶段模式后，留空的表征项将由「配方→表征」第一阶段模型预测填补，实现从配方直接正向预测；取消勾选则按训练集中位数填补。手动填入的表征值始终优先。</div>
+      </div>
+
+      <div class="card">
+        <h2>预测结果</h2>
+        <div id="pred-out">
+          <div class="placeholder"><span class="icon">⬡</span>填写左侧配方后点击"预测性能"，结果与预测区间将显示在这里。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 批量筛选 ============ -->
+  <div class="panel" id="panel-screen">
+    <div class="card" style="margin-bottom:20px">
+      <h2>扫描范围（单体与其余参数沿用"单配方预测"页当前输入）</h2>
+      <div class="row2" style="grid-template-columns:1fr 1fr 1fr 1fr 90px">
+        <div class="field"><label>D₁ 水相浓度 (wt%)</label><input id="s-d1" value="0.2, 0.5, 1.0, 1.5, 2.0"></div>
+        <div class="field"><label>D₂ 有机相浓度 (wt%)</label><input id="s-d2" value="0.10, 0.15, 0.20, 0.30"></div>
+        <div class="field"><label>T₁ 水相浸渍 (s)</label><input id="s-t1" value="60, 120, 300"></div>
+        <div class="field"><label>T₂ 界面反应 (s)</label><input id="s-t2" value="30, 60, 120"></div>
+        <div class="field"><label>Top-N</label><input id="s-topn" type="number" value="15"></div>
+      </div>
+      <button class="btn sec" style="max-width:220px" onclick="doScreen()">运行扫描</button>
+    </div>
+    <div class="card"><div id="screen-out">
+      <div class="placeholder"><span class="icon">≣</span>设置扫描范围后点击"运行扫描"，最优配方组合按综合得分排序显示。</div>
+    </div></div>
+  </div>
+
+  <!-- ============ 潜力单体筛选 ============ -->
+  <div class="panel" id="panel-monomers">
+    <div class="card" style="margin-bottom:20px">
+      <h2>潜力单体虚拟筛选</h2>
+      <div style="font-size:12.5px;color:var(--muted);margin-bottom:14px;line-height:1.6">
+        遍历数据集中<b>清洗后</b>的全部候选单体（含 N 胺 → 水相，含酰氯 → 有机相），
+        对每个单体对扫描合成条件网格（D₁×D₂×T₁）取其<b>最优</b>得分，即该单体对的潜力上限。
+        默认在"高性能膜"典型表征上下文下评估（Zeta=14 mV、孔径=0.40 nm、MWCO=360 Da）。
+      </div>
+      <div class="row2" style="grid-template-columns:1fr 1fr 1fr 1fr">
+        <div class="field"><label>基底膜</label><select id="mn-base"></select></div>
+        <div class="field"><label>Zeta 电位 (mV)</label><input id="mn-zeta" type="number" value="14"></div>
+        <div class="field"><label>平均孔径 (nm)</label><input id="mn-pore" type="number" step="0.01" value="0.40"></div>
+        <div class="field"><label>Top-N</label><input id="mn-topn" type="number" value="15"></div>
+      </div>
+      <button class="btn sec" style="max-width:260px" onclick="doMonomerScreen()">运行单体筛选</button>
+    </div>
+    <div class="card"><div id="monomer-out">
+      <div class="placeholder"><span class="icon">⬡</span>点击"运行单体筛选"，遍历全部单体组合并按镁锂平衡得分排序。</div>
+    </div></div>
+  </div>
+
+  <!-- ============ 特征重要性 ============ -->
+  <div class="panel" id="panel-importance">
+    <div class="card">
+      <h2>排列特征重要性</h2>
+      <div class="field" style="max-width:280px">
+        <label>选择目标</label>
+        <select id="imp-target" onchange="renderImportance()"></select>
+      </div>
+      <div id="imp-out"></div>
+      <div class="note">数值为该特征被随机打乱后模型 R² 的平均下降量，越大表示模型越依赖该特征。基于 ExtraTrees 全数据模型计算。</div>
+    </div>
+  </div>
+
+  <!-- ============ SHAP 分析 ============ -->
+  <div class="panel" id="panel-shap">
+    <div class="card">
+      <h2>SHAP 特征贡献分析</h2>
+      <div class="field" style="max-width:280px">
+        <label>选择目标</label>
+        <select id="shap-target" onchange="renderShap()"></select>
+      </div>
+      <div id="shap-out"></div>
+      <div class="note">
+        SHAP 值为各特征对模型输出的平均绝对贡献（自实现 TreeSHAP，逐样本可加性验证通过）。
+        <b style="color:#1668D6">蓝色</b>＝该特征平均推高预测值，<b style="color:#B8341A">红色</b>＝平均拉低预测值。
+        注意：截留率目标在变换空间 log(100−R) 上建模，方向解释需反转（推高变换值＝降低截留率）。
+        完整逐样本 SHAP 数据见训练输出 results/&lt;时间戳&gt;/shap_analysis.xlsx。
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 模型性能 ============ -->
+  <div class="panel" id="panel-metrics">
+    <div class="card">
+      <h2>模型性能（诚实评估）</h2>
+      <table><thead><tr>
+        <th>目标</th><th>样本数</th><th>配方数</th>
+        <th>交叉验证 R²</th><th>Test R²</th><th>RMSE</th><th>MAE</th><th>选用模型</th>
+      </tr></thead><tbody id="metrics-body"></tbody></table>
+      <div class="note">
+        <b>交叉验证 R²</b> 为 5 折交叉验证；<b>Test R²</b> 为 20% 随机留出测试集在 5 次不同划分下的平均值（原始尺度，与交叉验证同口径；取平均以消除小测试集的单次抽样波动）。
+        每个目标在 ExtraTrees / HistGBR / 两者集成中按交叉验证自动选择最优模型。
+        MAE 为平均绝对误差，对少数离群样本不敏感，更能反映主体区间的实用精度（如 Mg²⁺ 截留主体区 MAE 约 2%）。通量目标启用了适用域过滤（Flux Mg ≤40、Flux Li ≤30 LMH，共排除 4 个极端杠杆点，规则与数量记录于训练存档）；Mg²⁺/Li⁺ 截留保持全量数据。预测时请结合区间宽度判断单次预测的可信度。
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    模型：每个目标在 ExtraTrees / HistGBR / RandomForest 及其加权混合中按交叉验证自动选优；预测区间由分位数回归给出。<br>
+    镁锂平衡得分 = 0.80 × 调和平均(Mg2+ 截留质量, Li+ 透过质量) + 0.12 × 通量项 + 0.08 × PWP 项；
+    调和平均使任一侧偏弱时整体得分即偏低，以数学结构实现镁锂平衡，不使用差分 Δrej，也不使用分离因子 SF。
+  </footer>
+
+</div></main>
+
+<script>
+const TARGET_META = {
+  PWP:{label:"纯水渗透 PWP",unit:"LMH/bar",cls:"",max:45},
+  Mg_rej:{label:"Mg²⁺ 截留率",unit:"%",cls:"mg",max:100},
+  Flux_Mg:{label:"通量 Flux Mg²⁺",unit:"LMH",cls:"mg",max:50},
+  Li_rej:{label:"Li⁺ 截留率",unit:"%",cls:"li",max:100},
+  Flux_Li:{label:"通量 Flux Li⁺",unit:"LMH",cls:"li",max:50},
+};
+const ORDER = ["Mg_rej","Li_rej","Flux_Mg","Flux_Li","PWP"];
+
+document.querySelectorAll(".tab").forEach(t=>{
+  const act=()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    document.getElementById("panel-"+t.dataset.tab).classList.add("active");
+  };
+  t.onclick=act;
+  t.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act();}};
+});
+
+async function loadOptions(){
+  const o = await (await fetch("/api/options")).json();
+  const fill=(id,arr)=>{document.getElementById(id).innerHTML=
+    arr.map(v=>`<option>${v}</option>`).join("");};
+  fill("membrane",o.membranes); fill("smi1",o.smiles_aq); fill("smi2",o.smiles_org);
+  document.getElementById("imp-target").innerHTML=
+    ORDER.map(k=>`<option value="${k}">${TARGET_META[k].label}</option>`).join("");
+}
+
+async function loadHealth(){
+  const el=document.getElementById("verify-status");
+  try{
+    const r=await fetch("/api/health");
+    if(!r.ok) throw new Error("health check failed");
+    const d=await r.json();
+    el.classList.add("ok");
+    el.querySelector("span").textContent=
+      d.two_stage_available ? "服务正常 · 两阶段模型已就绪 · 可开始验证" : "服务正常 · 两阶段模型正在准备";
+  }catch(e){
+    el.querySelector("span").textContent="服务尚未连接 · 请等待启动完成后刷新页面";
+  }
+}
+
+function gatherInput(){
+  const num=id=>{const v=document.getElementById(id).value;return v===""?null:parseFloat(v);};
+  return {
+    Foundational_Membrane:document.getElementById("membrane").value,
+    SMILES_part1:document.getElementById("smi1").value,
+    SMILES_part2:document.getElementById("smi2").value,
+    Density_part1:num("d1"), Covered_Time_1:num("t1"),
+    Density_part2:num("d2"), Covered_Time_2:num("t2"),
+    WCA:num("wca"), Zeta_Potential:num("zeta"),
+    Average_pore_diameter:num("pore"), MWCO:num("mwco"),
+    Thickness:num("thick"), Pressure:num("press"), Feed:num("feed"),
+    two_stage:document.getElementById("two-stage")?document.getElementById("two-stage").checked:false
+  };
+}
+
+function rangeBar(p,max,cls){
+  const l=100*Math.max(0,Math.min(max,p.lo))/max,
+        h=100*Math.max(0,Math.min(max,p.hi))/max,
+        v=100*Math.max(0,Math.min(max,p.value))/max;
+  return `<div class="range">
+    <div class="track">
+      <span class="band" style="left:${l}%;width:${Math.max(1,h-l)}%"></span>
+      <span class="pin" style="left:calc(${v}% - 1px)"></span>
+    </div>
+    <div class="lab"><span>${p.lo}</span><span>区间 10–90%</span><span>${p.hi}</span></div>
+  </div>`;
+}
+
+async function doPredict(){
+  const out=document.getElementById("pred-out");
+  out.innerHTML='<div class="placeholder">预测中，请稍候…</div>';
+  let r;
+  try{
+    r=await fetch("/api/predict",{method:"POST",
+      headers:{"Content-Type":"application/json"},body:JSON.stringify(gatherInput())});
+  }catch(e){
+    out.innerHTML=`<div class="placeholder">网络错误：${e.message}。请确认服务窗口未关闭。</div>`;return;
+  }
+  if(!r.ok){out.innerHTML=`<div class="placeholder">出错：${await r.text()}</div>`;return;}
+  const d=await r.json();
+  let h="";
+  if(d.char_source==="stage1"){
+    h+=`<div class="note" style="margin:0 0 14px;border-left-color:var(--li)">
+      <b style="color:var(--li)">两阶段预测</b>：未填写的膜表征已由「配方→表征」第一阶段模型自动预测填补，
+      本结果为从配方出发的正向预测。</div>`;
+  }
+  h+='<div class="res-grid">';
+  for(const k of ORDER){
+    const m=TARGET_META[k], p=d.predictions[k];
+    h+=`<div class="metric ${m.cls}">
+      <div class="name">${m.label}</div>
+      <div class="val">${p.value}<span class="unit">${m.unit}</span></div>
+      ${rangeBar(p,m.max,m.cls)}
+    </div>`;
+  }
+  h+='</div>';
+  h+=`<div class="score-box">
+    <div>
+      <div class="klabel">镁锂平衡分离得分（0–1）</div>
+      <div class="big">${d.composite_score}</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:13px;font-variant-numeric:tabular-nums">
+        <span style="color:var(--mg);font-weight:700">Mg²⁺ 截留质量 ${d.mg_quality}</span>
+        &nbsp;·&nbsp;
+        <span style="color:var(--li);font-weight:700">Li⁺ 透过质量 ${d.li_quality}</span>
+      </div>
+      <div class="score-note">分离项取两者的调和平均（${d.separation_balance}）——任一项偏低整体即偏低，以此实现镁锂平衡，不依赖差分或阈值。</div>
+    </div>
+  </div>`;
+  out.innerHTML=h;
+}
+
+function parseList(id){return document.getElementById(id).value.split(",")
+  .map(x=>parseFloat(x.trim())).filter(x=>!isNaN(x));}
+
+async function doScreen(){
+  const out=document.getElementById("screen-out");
+  out.innerHTML='<div class="placeholder">扫描中，请稍候…</div>';
+  const body={base:gatherInput(),D1_list:parseList("s-d1"),D2_list:parseList("s-d2"),
+    T1_list:parseList("s-t1"),T2_list:parseList("s-t2"),
+    top_n:parseInt(document.getElementById("s-topn").value)||15};
+  let r;
+  try{
+    r=await fetch("/api/screen",{method:"POST",
+      headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  }catch(e){
+    out.innerHTML=`<div class="placeholder">网络错误：${e.message}</div>`;return;
+  }
+  if(!r.ok){out.innerHTML=`<div class="placeholder">出错：${await r.text()}</div>`;return;}
+  let d;
+  try{ d=await r.json(); }
+  catch(e){ out.innerHTML=`<div class="placeholder">返回数据解析失败：${e.message}</div>`;return; }
+  try{
+    let h=`<div style="font-size:13px;color:var(--muted);margin-bottom:12px">
+      共评估 <b>${d.n_total}</b> 组配方条件（D₁ × D₂ × T₁ × T₂），按镁锂平衡得分排序取前 ${d.results.length} 名。</div>`;
+    h+='<div class="tbl-wrap"><table><thead><tr><th>排名</th><th>D₁ wt%</th><th>D₂ wt%</th><th>T₁ s</th><th>T₂ s</th>'
+      +'<th>Mg²⁺ %</th><th>Li⁺ %</th><th>Flux Mg</th><th>综合得分</th></tr></thead><tbody>';
+    d.results.forEach((x,i)=>{
+      h+=`<tr class="${i===0?'top':''}">
+        <td><span class="rank-badge">${i+1}</span></td>
+        <td>${x.D1}</td><td>${x.D2}</td><td>${x.T1}</td><td>${x.T2}</td>
+        <td>${x.Mg_rej}</td><td>${x.Li_rej}</td><td>${x.Flux_Mg}</td>
+        <td><b>${x.score}</b></td></tr>`;
+    });
+    h+='</tbody></table></div>';
+    h+=`<div class="note" style="margin-top:14px">扫描固定当前"单配方预测"页选定的单体与膜表征，
+      仅遍历合成条件组合。若要比较不同单体，请使用"潜力单体筛选"页。</div>`;
+    out.innerHTML=h;
+  }catch(e){
+    out.innerHTML=`<div class="placeholder">渲染出错：${e.message}</div>`;
+  }
+}
+
+async function doMonomerScreen(){
+  const out=document.getElementById("monomer-out");
+  out.innerHTML='<div class="placeholder">筛选中（遍历全部单体组合 × 合成条件网格）…</div>';
+  const body={Foundational_Membrane:document.getElementById("mn-base").value,
+    Zeta_Potential:parseFloat(document.getElementById("mn-zeta").value)||14,
+    Average_pore_diameter:parseFloat(document.getElementById("mn-pore").value)||0.40,
+    top_n:parseInt(document.getElementById("mn-topn").value)||15};
+  let r;
+  try{
+    r=await fetch("/api/screen_monomers",{method:"POST",
+      headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  }catch(e){out.innerHTML=`<div class="placeholder">网络错误：${e.message}</div>`;return;}
+  if(!r.ok){out.innerHTML=`<div class="placeholder">出错：${await r.text()}</div>`;return;}
+  const d=await r.json();
+  let h=`<div style="font-size:13px;color:var(--muted);margin-bottom:12px">
+    共评估 <b>${d.n_pairs}</b> 个单体组合（${d.n_aq} 胺 × ${d.n_org} 酰氯），合计 ${d.n_combinations} 种配方条件，每组取网格最优。
+    <span class="src-tag ds">数据集</span> 表示该单体出现在训练数据中，
+    <span class="src-tag lib">扩展库</span> 为文献常用单体（模型对其为外推预测，可信度较低）。</div>`;
+  h+='<div class="tbl-wrap"><table><thead><tr><th>排名</th><th>水相单体</th><th>有机相单体</th>'
+    +'<th>Mg²⁺ %</th><th>Li⁺ %</th><th>最优 D₁/D₂/T₁/T₂</th><th>得分</th></tr></thead><tbody>';
+  d.results.forEach((x,i)=>{
+    const aqTag = x.aq_in_dataset ? '<span class="src-tag ds">数据集</span>' : '<span class="src-tag lib">扩展库</span>';
+    const orgTag = x.org_in_dataset ? '<span class="src-tag ds">数据集</span>' : '<span class="src-tag lib">扩展库</span>';
+    const aqName = x.aq_name ? `<span class="mname">${x.aq_name}${aqTag}</span>` : aqTag;
+    const orgName = x.org_name ? `<span class="mname">${x.org_name}${orgTag}</span>` : orgTag;
+    h+=`<tr class="${i===0?'top':''}">
+      <td><span class="rank-badge">${i+1}</span></td>
+      <td class="smiles">${aqName}${x.aq}</td>
+      <td class="smiles">${orgName}${x.org}</td>
+      <td>${x.Mg_rej}</td><td>${x.Li_rej}</td>
+      <td>${x.best_D1} / ${x.best_D2} / ${x.best_T1} / ${x.best_T2}</td>
+      <td><b>${x.score}</b></td></tr>`;
+  });
+  h+='</tbody></table></div>';
+  h+='<div style="margin-top:20px;font-weight:600;font-size:13.5px">水相胺单体潜力排名（各单体最优搭配得分）</div>';
+  const maxs=Math.max(...d.aq_ranking.map(a=>a.best_score),1e-9);
+  d.aq_ranking.forEach(a=>{
+    const nm = a.aq_name ? a.aq_name.split("｜")[0] : a.aq.slice(0,18);
+    h+=`<div class="imp-row" style="margin-top:7px">
+      <div class="lbl" title="${a.aq}">${nm}</div>
+      <div class="track"><i style="width:${100*a.best_score/maxs}%"></i></div>
+      <div class="num">${a.best_score.toFixed(3)} · Mg≈${Math.round(a.best_mg)}%</div>
+    </div>`;
+  });
+  const tsNote = d.two_stage
+    ? '<b style="color:var(--li)">两阶段筛选（自洽）：</b>每个单体组合的膜表征由「配方→表征」第一阶段模型<b>各自预测</b>，换单体时表征随之改变，筛选在物理上自洽。'
+    : '<b>结果解读须知：</b>筛选在统一膜表征上下文下进行（非各单体实际成膜表征），属条件性推断。';
+  h+=`<div class="note" style="margin-top:14px">${tsNote}
+    结果仍需实验验证。当前 Mg²⁺ 截留上限约 ${Math.round(Math.max(...d.results.map(x=>parseFloat(x.Mg_rej))))}%，尚无组合稳定预测 ≥95%。</div>`;
+  out.innerHTML=h;
+}
+
+let SHAP_DATA=null;
+async function renderShap(){
+  if(!SHAP_DATA){
+    try{ SHAP_DATA=await (await fetch("/api/shap")).json(); }
+    catch(e){ document.getElementById("shap-out").innerHTML=
+      '<div class="placeholder">SHAP 数据加载失败（旧模型请重训一次以生成 shap.json）。</div>'; return; }
+  }
+  const k=document.getElementById("shap-target").value;
+  const rows=(SHAP_DATA[k]||[]);
+  if(!rows.length){document.getElementById("shap-out").innerHTML=
+    '<div class="placeholder">该目标暂无 SHAP 数据（重新训练一次即可生成）。</div>';return;}
+  const max=Math.max(...rows.map(r=>Math.abs(r.mean_abs_shap)),1e-9);
+  document.getElementById("shap-out").innerHTML=rows.map(r=>`
+    <div class="imp-row">
+      <div class="lbl" title="${r.feature}">${r.feature}</div>
+      <div class="track"><i class="${(r.direction_corr!==undefined?r.direction_corr:(r.mean_shap||0))>=0?'pos':'neg'}" style="width:${100*Math.abs(r.mean_abs_shap)/max}%"></i></div>
+      <div class="num">${r.mean_abs_shap.toFixed(4)}</div>
+    </div>`).join("");
+}
+
+let IMP_DATA=null;
+async function renderImportance(){
+  if(!IMP_DATA) IMP_DATA=await (await fetch("/api/importance")).json();
+  const k=document.getElementById("imp-target").value;
+  const rows=IMP_DATA[k]||[];
+  if(!rows.length){document.getElementById("imp-out").innerHTML=
+    '<div class="placeholder">该目标暂无重要性数据。</div>';return;}
+  const max=Math.max(...rows.map(r=>r.importance),1e-9);
+  document.getElementById("imp-out").innerHTML=rows.map(r=>`
+    <div class="imp-row">
+      <div class="lbl" title="${r.feature}">${r.feature}</div>
+      <div class="track"><i style="width:${100*r.importance/max}%"></i></div>
+      <div class="num">${r.importance.toFixed(4)}</div>
+    </div>`).join("");
+}
+
+async function loadMetrics(){
+  const m=await (await fetch("/api/metrics")).json();
+  document.getElementById("metrics-body").innerHTML=ORDER.map(k=>{
+    const x=m[k]; if(!x) return "";
+    const f3=v=>Number(v).toFixed(3), f2=v=>Number(v).toFixed(2);
+    return `<tr><td>${TARGET_META[k].label}</td><td>${x.n}</td>
+      <td>${x.n_groups}</td><td>${f3(x.CV_R2)}</td><td>${f3(x.Test_R2)}</td>
+      <td>${f2(x.RMSE)}</td><td>${x.MAE!==undefined?f2(x.MAE):'—'}</td><td>${x.model||'—'}</td></tr>`;
+  }).join("");
+}
+
+(async()=>{ 
+  try{
+    await loadHealth(); await loadOptions(); await loadMetrics(); await renderImportance();
+    // 单体筛选:基底膜下拉复用 options
+    const o=await (await fetch("/api/options")).json();
+    document.getElementById("mn-base").innerHTML=o.membranes.map(v=>`<option>${v}</option>`).join("");
+    // SHAP 目标下拉
+    document.getElementById("shap-target").innerHTML=
+      ORDER.map(k=>`<option value="${k}">${TARGET_META[k].label}</option>`).join("");
+    await renderShap();
+  }catch(e){ console.error(e); }
+})();
+</script>
+</body>
+</html>
