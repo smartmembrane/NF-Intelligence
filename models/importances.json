@@ -1,0 +1,312 @@
+{
+  "PWP": [
+    {
+      "feature": "base_Psf",
+      "importance": 0.10056375444254437
+    },
+    {
+      "feature": "base_PAI",
+      "importance": 0.08572678850367157
+    },
+    {
+      "feature": "p_sq",
+      "importance": 0.045831126717722104
+    },
+    {
+      "feature": "wtd_nN",
+      "importance": 0.020160662627164094
+    },
+    {
+      "feature": "Average_pore_diameter",
+      "importance": 0.018933028127235324
+    },
+    {
+      "feature": "steric_gap",
+      "importance": 0.017953171329590095
+    },
+    {
+      "feature": "pressure",
+      "importance": 0.01765462721748895
+    },
+    {
+      "feature": "steric_Mg",
+      "importance": 0.01762000374423528
+    },
+    {
+      "feature": "pore_sq",
+      "importance": 0.015380618382081823
+    },
+    {
+      "feature": "wtd_nC",
+      "importance": 0.015144189893523174
+    },
+    {
+      "feature": "wtd_mw",
+      "importance": 0.013519042308063084
+    },
+    {
+      "feature": "steric_Li",
+      "importance": 0.01337916573097786
+    },
+    {
+      "feature": "agg_nCl",
+      "importance": 0.010698327378597217
+    },
+    {
+      "feature": "agg_n_amine",
+      "importance": 0.006670895614353162
+    },
+    {
+      "feature": "D1_aq",
+      "importance": 0.006516533884649095
+    }
+  ],
+  "Mg_rej": [
+    {
+      "feature": "base_PAI",
+      "importance": 0.12532121237374488
+    },
+    {
+      "feature": "Modification_Time_s",
+      "importance": 0.1085295369729066
+    },
+    {
+      "feature": "agg_nF",
+      "importance": 0.08116555933979819
+    },
+    {
+      "feature": "base_PAN",
+      "importance": 0.07564097523508617
+    },
+    {
+      "feature": "base_PK",
+      "importance": 0.04525770822727451
+    },
+    {
+      "feature": "Zeta_Potential",
+      "importance": 0.03174568559610014
+    },
+    {
+      "feature": "D2_org",
+      "importance": 0.029764005016124168
+    },
+    {
+      "feature": "mwco_per_thk",
+      "importance": 0.027277413140290446
+    },
+    {
+      "feature": "p_x_feed",
+      "importance": 0.018690944883929528
+    },
+    {
+      "feature": "Rq_nm",
+      "importance": 0.01489993006065013
+    },
+    {
+      "feature": "feed",
+      "importance": 0.014794939670563667
+    },
+    {
+      "feature": "d_ratio",
+      "importance": 0.013474224719765227
+    },
+    {
+      "feature": "log_feed",
+      "importance": 0.012471157028752483
+    },
+    {
+      "feature": "pressure",
+      "importance": 0.009388169998435364
+    },
+    {
+      "feature": "T2_rxn",
+      "importance": 0.00926962899333103
+    }
+  ],
+  "Flux_Mg": [
+    {
+      "feature": "wtd_n_arom",
+      "importance": 0.12203009513218488
+    },
+    {
+      "feature": "Modification_Temperature_C",
+      "importance": 0.05127652605203037
+    },
+    {
+      "feature": "Modification_Time_s",
+      "importance": 0.03896870616227194
+    },
+    {
+      "feature": "wtd_nO",
+      "importance": 0.038658784100340876
+    },
+    {
+      "feature": "wtd_length",
+      "importance": 0.02871570791910305
+    },
+    {
+      "feature": "base_Psf",
+      "importance": 0.020205327450324717
+    },
+    {
+      "feature": "wtd_mw",
+      "importance": 0.014491405377987515
+    },
+    {
+      "feature": "D2_org",
+      "importance": 0.009738076458454953
+    },
+    {
+      "feature": "T2_rxn",
+      "importance": 0.008673566118767961
+    },
+    {
+      "feature": "wtd_nC",
+      "importance": 0.008532207914829892
+    },
+    {
+      "feature": "D1_aq",
+      "importance": 0.008211790866553187
+    },
+    {
+      "feature": "conc_x_time",
+      "importance": 0.008196564046240085
+    },
+    {
+      "feature": "d1_sq",
+      "importance": 0.007459574525062684
+    },
+    {
+      "feature": "p_x_feed",
+      "importance": 0.0070613777968190905
+    },
+    {
+      "feature": "base_PE",
+      "importance": 0.006727677789289482
+    }
+  ],
+  "Li_rej": [
+    {
+      "feature": "base_Psf",
+      "importance": 0.22229661537908674
+    },
+    {
+      "feature": "wtd_nO",
+      "importance": 0.07601224455987654
+    },
+    {
+      "feature": "wtd_n_arom",
+      "importance": 0.03841360068258251
+    },
+    {
+      "feature": "Modification_Time_s",
+      "importance": 0.023037827729586013
+    },
+    {
+      "feature": "log_feed",
+      "importance": 0.013650090689080102
+    },
+    {
+      "feature": "agg_n_arom",
+      "importance": 0.013477493511929534
+    },
+    {
+      "feature": "feed",
+      "importance": 0.010457542740595516
+    },
+    {
+      "feature": "WCA_d",
+      "importance": 0.010394116540378334
+    },
+    {
+      "feature": "p_x_feed",
+      "importance": 0.01022014521721426
+    },
+    {
+      "feature": "base_PE",
+      "importance": 0.009248753537909049
+    },
+    {
+      "feature": "base_PAI",
+      "importance": 0.00778775719139338
+    },
+    {
+      "feature": "n_polymer",
+      "importance": 0.007297444731635849
+    },
+    {
+      "feature": "agg_nN",
+      "importance": 0.007239569787688582
+    },
+    {
+      "feature": "agg_length",
+      "importance": 0.00701513347241936
+    },
+    {
+      "feature": "agg_nC",
+      "importance": 0.006892750874530229
+    }
+  ],
+  "Flux_Li": [
+    {
+      "feature": "base_Psf",
+      "importance": 0.13266384318022698
+    },
+    {
+      "feature": "Modification_Time_s",
+      "importance": 0.10566303936075785
+    },
+    {
+      "feature": "D2_org",
+      "importance": 0.07651832552361446
+    },
+    {
+      "feature": "wtd_nO",
+      "importance": 0.033129432424299554
+    },
+    {
+      "feature": "Modification_Temperature_C",
+      "importance": 0.03282196295796311
+    },
+    {
+      "feature": "log_feed",
+      "importance": 0.019660772313387892
+    },
+    {
+      "feature": "wtd_n_arom",
+      "importance": 0.01571296652727125
+    },
+    {
+      "feature": "feed",
+      "importance": 0.009859809479983328
+    },
+    {
+      "feature": "wtd_mw",
+      "importance": 0.007777355033513816
+    },
+    {
+      "feature": "p_x_feed",
+      "importance": 0.007005574759786498
+    },
+    {
+      "feature": "T2_rxn",
+      "importance": 0.006287673128063914
+    },
+    {
+      "feature": "d1_sq",
+      "importance": 0.005841737583810985
+    },
+    {
+      "feature": "base_PE",
+      "importance": 0.005527001225698686
+    },
+    {
+      "feature": "wtd_nC",
+      "importance": 0.005356236838220257
+    },
+    {
+      "feature": "wtd_length",
+      "importance": 0.0051465626877488235
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "PWP": {
+    "n": 170,
+    "n_groups": 100,
+    "CV_R2": 0.874,
+    "Test_R2": 0.844,
+    "RMSE": 3.08,
+    "MAE": 1.616,
+    "model": "ET.5+ET.7"
+  },
+  "Mg_rej": {
+    "n": 321,
+    "n_groups": 197,
+    "CV_R2": 0.718,
+    "Test_R2": 0.65,
+    "RMSE": 5.738,
+    "MAE": 2.559,
+    "model": "ET.5+ET.7"
+  },
+  "Flux_Mg": {
+    "n": 261,
+    "n_groups": 150,
+    "CV_R2": 0.888,
+    "Test_R2": 0.906,
+    "RMSE": 1.882,
+    "MAE": 1.086,
+    "model": "ET.5"
+  },
+  "Li_rej": {
+    "n": 241,
+    "n_groups": 174,
+    "CV_R2": 0.767,
+    "Test_R2": 0.779,
+    "RMSE": 7.444,
+    "MAE": 5.188,
+    "model": "ET.7"
+  },
+  "Flux_Li": {
+    "n": 184,
+    "n_groups": 126,
+    "CV_R2": 0.837,
+    "Test_R2": 0.859,
+    "RMSE": 1.751,
+    "MAE": 1.159,
+    "model": "ET1"
+  }
+}

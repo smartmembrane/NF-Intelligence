@@ -1,0 +1,16 @@
+{
+  "available": true,
+  "failure_definition": "Mg_rej < 80%",
+  "failure_threshold": 80.0,
+  "alert_probability": 0.2,
+  "n": 321,
+  "n_failure": 23,
+  "failure_rate": 0.0717,
+  "PR_AUC_GroupKFold": 0.617,
+  "ROC_AUC_GroupKFold": 0.926,
+  "Recall_at_alert": 0.783,
+  "Precision_at_alert": 0.45,
+  "n_alerted": 40,
+  "model": "ExtraTreesClassifier",
+  "note": "风险分类与连续截留率回归并行输出；不将其表述为连续 R² 提升。"
+}

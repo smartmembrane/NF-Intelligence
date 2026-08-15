@@ -1,0 +1,251 @@
+{
+  "selection_metric": "GroupKFold R² on original target scale",
+  "available_models": [
+    "ExtraTrees-0.5",
+    "ExtraTrees-0.7",
+    "ExtraTrees-1.0",
+    "RandomForest",
+    "HistGradientBoosting",
+    "GradientBoosting",
+    "XGBoost",
+    "LightGBM",
+    "CatBoost"
+  ],
+  "comparisons": {
+    "PWP": [
+      {
+        "model": "GradientBoosting",
+        "GroupKFold_R2": 0.7284109838745709,
+        "GroupKFold_MAE": 2.6040103136733035
+      },
+      {
+        "model": "LightGBM",
+        "GroupKFold_R2": 0.715166940547062,
+        "GroupKFold_MAE": 3.043977381431531
+      },
+      {
+        "model": "ExtraTrees-0.5",
+        "GroupKFold_R2": 0.6988698132409827,
+        "GroupKFold_MAE": 2.8610654526189707
+      },
+      {
+        "model": "ExtraTrees-1.0",
+        "GroupKFold_R2": 0.6908683511972347,
+        "GroupKFold_MAE": 2.894854798250243
+      },
+      {
+        "model": "ExtraTrees-0.7",
+        "GroupKFold_R2": 0.6850096267259086,
+        "GroupKFold_MAE": 2.923317762047872
+      },
+      {
+        "model": "HistGradientBoosting",
+        "GroupKFold_R2": 0.6774928752118192,
+        "GroupKFold_MAE": 2.957638926916096
+      },
+      {
+        "model": "CatBoost",
+        "GroupKFold_R2": 0.6513768639642468,
+        "GroupKFold_MAE": 3.2574174348678024
+      },
+      {
+        "model": "RandomForest",
+        "GroupKFold_R2": 0.6228989082661845,
+        "GroupKFold_MAE": 3.272066423262199
+      },
+      {
+        "model": "XGBoost",
+        "GroupKFold_R2": 0.6215051354409746,
+        "GroupKFold_MAE": 3.4814153364258464
+      }
+    ],
+    "Mg_rej": [
+      {
+        "model": "LightGBM",
+        "GroupKFold_R2": 0.25754443614603917,
+        "GroupKFold_MAE": 4.418249528445238
+      },
+      {
+        "model": "ExtraTrees-0.5",
+        "GroupKFold_R2": 0.25424880067568767,
+        "GroupKFold_MAE": 4.232893603448998
+      },
+      {
+        "model": "ExtraTrees-0.7",
+        "GroupKFold_R2": 0.2511030367433331,
+        "GroupKFold_MAE": 4.284810885637839
+      },
+      {
+        "model": "ExtraTrees-1.0",
+        "GroupKFold_R2": 0.23568436458447461,
+        "GroupKFold_MAE": 4.371128839057025
+      },
+      {
+        "model": "HistGradientBoosting",
+        "GroupKFold_R2": 0.19727553054678126,
+        "GroupKFold_MAE": 4.521677278651766
+      },
+      {
+        "model": "CatBoost",
+        "GroupKFold_R2": 0.18910874629574947,
+        "GroupKFold_MAE": 4.3863076381539825
+      },
+      {
+        "model": "XGBoost",
+        "GroupKFold_R2": 0.17770043877027708,
+        "GroupKFold_MAE": 4.452173809217711
+      },
+      {
+        "model": "RandomForest",
+        "GroupKFold_R2": 0.16712253889265816,
+        "GroupKFold_MAE": 4.468490121779242
+      },
+      {
+        "model": "GradientBoosting",
+        "GroupKFold_R2": 0.10968756618697295,
+        "GroupKFold_MAE": 4.687761792483264
+      }
+    ],
+    "Flux_Mg": [
+      {
+        "model": "HistGradientBoosting",
+        "GroupKFold_R2": 0.5080287398694922,
+        "GroupKFold_MAE": 2.8910749601407586
+      },
+      {
+        "model": "LightGBM",
+        "GroupKFold_R2": 0.4875976990324318,
+        "GroupKFold_MAE": 3.0140422940920257
+      },
+      {
+        "model": "ExtraTrees-1.0",
+        "GroupKFold_R2": 0.46648004286841416,
+        "GroupKFold_MAE": 2.9172604037753453
+      },
+      {
+        "model": "ExtraTrees-0.7",
+        "GroupKFold_R2": 0.4405203000076683,
+        "GroupKFold_MAE": 2.9717766791187548
+      },
+      {
+        "model": "CatBoost",
+        "GroupKFold_R2": 0.42963292515038887,
+        "GroupKFold_MAE": 3.1831584383859535
+      },
+      {
+        "model": "ExtraTrees-0.5",
+        "GroupKFold_R2": 0.42662996097584116,
+        "GroupKFold_MAE": 3.0205335400016966
+      },
+      {
+        "model": "RandomForest",
+        "GroupKFold_R2": 0.420158556968822,
+        "GroupKFold_MAE": 3.204884587731645
+      },
+      {
+        "model": "XGBoost",
+        "GroupKFold_R2": 0.34279730086552707,
+        "GroupKFold_MAE": 3.488969038870719
+      },
+      {
+        "model": "GradientBoosting",
+        "GroupKFold_R2": 0.2869381149217395,
+        "GroupKFold_MAE": 3.5376747686969434
+      }
+    ],
+    "Li_rej": [
+      {
+        "model": "ExtraTrees-1.0",
+        "GroupKFold_R2": 0.5805024021977797,
+        "GroupKFold_MAE": 7.139974752699556
+      },
+      {
+        "model": "ExtraTrees-0.7",
+        "GroupKFold_R2": 0.5670365419034429,
+        "GroupKFold_MAE": 7.22045973850114
+      },
+      {
+        "model": "ExtraTrees-0.5",
+        "GroupKFold_R2": 0.5572152247917563,
+        "GroupKFold_MAE": 7.268256796840389
+      },
+      {
+        "model": "HistGradientBoosting",
+        "GroupKFold_R2": 0.49821791252034475,
+        "GroupKFold_MAE": 8.15232406644718
+      },
+      {
+        "model": "CatBoost",
+        "GroupKFold_R2": 0.47959238784812064,
+        "GroupKFold_MAE": 8.160549856188112
+      },
+      {
+        "model": "LightGBM",
+        "GroupKFold_R2": 0.46583628352171524,
+        "GroupKFold_MAE": 8.497355041330138
+      },
+      {
+        "model": "RandomForest",
+        "GroupKFold_R2": 0.4352667239331899,
+        "GroupKFold_MAE": 8.450961931208921
+      },
+      {
+        "model": "GradientBoosting",
+        "GroupKFold_R2": 0.4029452785757043,
+        "GroupKFold_MAE": 8.997327385346175
+      },
+      {
+        "model": "XGBoost",
+        "GroupKFold_R2": 0.28438595840919656,
+        "GroupKFold_MAE": 8.879142876938687
+      }
+    ],
+    "Flux_Li": [
+      {
+        "model": "ExtraTrees-0.5",
+        "GroupKFold_R2": 0.5280579619169579,
+        "GroupKFold_MAE": 2.233125717474099
+      },
+      {
+        "model": "ExtraTrees-0.7",
+        "GroupKFold_R2": 0.5209550274611069,
+        "GroupKFold_MAE": 2.267324226618061
+      },
+      {
+        "model": "ExtraTrees-1.0",
+        "GroupKFold_R2": 0.47513995472143045,
+        "GroupKFold_MAE": 2.336368352059809
+      },
+      {
+        "model": "CatBoost",
+        "GroupKFold_R2": 0.4448017763509202,
+        "GroupKFold_MAE": 2.5339789203949605
+      },
+      {
+        "model": "GradientBoosting",
+        "GroupKFold_R2": 0.43665654367727136,
+        "GroupKFold_MAE": 2.4842953537589536
+      },
+      {
+        "model": "HistGradientBoosting",
+        "GroupKFold_R2": 0.3739087078143525,
+        "GroupKFold_MAE": 2.665600369346019
+      },
+      {
+        "model": "XGBoost",
+        "GroupKFold_R2": 0.37096167313130923,
+        "GroupKFold_MAE": 2.512405539582215
+      },
+      {
+        "model": "RandomForest",
+        "GroupKFold_R2": 0.338528871132019,
+        "GroupKFold_MAE": 2.698605082683823
+      },
+      {
+        "model": "LightGBM",
+        "GroupKFold_R2": 0.2659479740131264,
+        "GroupKFold_MAE": 2.81344959070302
+      }
+    ]
+  }
+}
