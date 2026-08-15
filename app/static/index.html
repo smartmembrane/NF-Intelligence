@@ -203,17 +203,47 @@
   .row2 .field label{min-height:36px;display:flex;align-items:flex-end}
   .row2 .field input,.row2 .field select{margin-top:auto}
   @media(max-width:520px){.row2{gap:10px}.row2 .field label{font-size:11px;min-height:34px}.language-toggle{position:static;margin-bottom:12px;justify-content:flex-end}}
+  
+  .language-toggle{position:absolute;right:0;top:0;display:flex;align-items:center;gap:8px;font-size:12px;color:#DCEBFF}
+  .language-toggle a{color:#FFFFFF;text-decoration:none;border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:4px 9px;font-weight:700}
+  .language-toggle a:hover{background:rgba(255,255,255,.12)}
+  .language-toggle span{font-weight:700;color:#FFFFFF}
+  .row2 .field{display:flex;flex-direction:column}
+  .row2 .field label{min-height:36px;display:flex;align-items:flex-end}
+  .row2 .field input,.row2 .field select{margin-top:auto}
+  body{background:#F5F7FB}
+  header{min-height:220px;background:radial-gradient(circle at 80% 20%,rgba(88,196,255,.28),transparent 26%),linear-gradient(120deg,#0A2E6E 0%,#1457B5 52%,#0F75B8 100%)}
+  header::before{content:"";position:absolute;inset:0;opacity:.35;background-image:linear-gradient(rgba(255,255,255,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.10) 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(90deg,#000 0%,transparent 75%)}
+  header .wrap{padding-top:34px;padding-bottom:32px;min-height:220px}
+  .hero-copy{max-width:690px;position:relative;z-index:2}
+  .eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:10px;letter-spacing:.13em}
+  .eyebrow::before{content:"AI";display:inline-flex;align-items:center;justify-content:center;width:25px;height:17px;border:1px solid rgba(255,255,255,.55);border-radius:4px;font-size:9px;letter-spacing:0;color:#DDF5FF;font-weight:800}
+  h1{font-size:clamp(31px,3vw,46px);line-height:1.08;margin-bottom:9px;letter-spacing:-.02em}
+  .sub{font-size:14px;max-width:610px;line-height:1.6}
+  .ion-legend{margin-top:15px}
+  .verify-strip{display:inline-flex;background:rgba(3,24,67,.24);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 11px;margin-top:16px}
+  .model-path{position:absolute;right:0;top:45px;width:350px;display:flex;align-items:center;justify-content:flex-end;gap:8px;z-index:2}
+  .model-step{width:94px;min-height:78px;padding:12px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.10);backdrop-filter:blur(5px);color:#FFF;text-align:center}
+  .model-step b{display:block;font-size:10px;letter-spacing:.12em;color:#AEEAFF;margin-bottom:6px}.model-step span{font-size:11px;font-weight:700;line-height:1.25;display:block}
+  .model-arrow{font-size:18px;color:#BEEFFF;opacity:.9}
+  nav{background:rgba(255,255,255,.97)}.tab{padding:14px 17px;font-size:13px}
+  .card{border-radius:14px;padding:24px;box-shadow:0 6px 18px rgba(22,54,98,.06)}
+  .card h2{font-size:16px}.field{margin-bottom:14px}input,select{border-radius:8px;padding:10px 12px}.row2{gap:13px}
+  @media(max-width:980px){.model-path{opacity:.45;right:18px;transform:scale(.85);transform-origin:top right}.hero-copy{max-width:610px}}
+  @media(max-width:700px){header,header .wrap{min-height:auto}.model-path{display:none}.hero-copy{max-width:none}}
+  @media(max-width:520px){.row2{gap:10px}.row2 .field label{font-size:11px;min-height:34px}.language-toggle{position:static;margin-bottom:12px;justify-content:flex-end}}
   </style>
 </head><body>
 <header>
-  <div class="transport" aria-hidden="true"><div class="membrane"></div><span class="ion li"></span><span class="ion li" style="animation-delay:1.7s"></span><span class="ion li" style="animation-delay:3.4s"></span><span class="ion mg" style="animation-delay:.6s"></span><span class="ion mg" style="animation-delay:2.9s"></span></div>
   <div class="wrap">
     <div class="language-toggle"><span>English</span><a href="/static/index_zh.html">简体中文</a></div>
-    <div class="eyebrow">NF Intelligence · Salt-Lake Brine</div>
-    <h1>Nanofiltration Intelligence Platform</h1>
-    <div class="sub">Predict Mg²⁺/Li⁺ separation performance directly from membrane recipes and operating conditions.</div>
-    <div class="ion-legend"><span><i class="dot mg"></i>Mg²⁺ retained</span><span><i class="dot li"></i>Li⁺ permeated</span></div>
-    <div class="verify-strip" id="verify-status" role="status" aria-live="polite"><i class="verify-dot"></i><span>Checking service status...</span></div>
+    <div class="hero-copy"><div class="eyebrow">ML-POWERED · SALT-LAKE BRINE</div>
+      <h1>Nanofiltration Intelligence Platform</h1>
+      <div class="sub">AI-guided prediction for Mg²⁺/Li⁺ separation performance, translating membrane recipes and operating conditions into actionable research evidence.</div>
+      <div class="ion-legend"><span><i class="dot mg"></i>Mg²⁺ retention</span><span><i class="dot li"></i>Li⁺ permeability</span></div>
+      <div class="verify-strip" id="verify-status" role="status" aria-live="polite"><i class="verify-dot"></i><span>Checking service status...</span></div>
+    </div>
+    <div class="model-path" aria-label="Machine learning workflow"><div class="model-step"><b>INPUT</b><span>Recipe</span></div><div class="model-arrow">→</div><div class="model-step"><b>STAGE 1</b><span>Characterization</span></div><div class="model-arrow">→</div><div class="model-step"><b>STAGE 2</b><span>Performance</span></div></div>
   </div>
 </header>
 
