@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nanofiltration Intelligence Platform</title>
+<title>Nanofiltration Prediction Platform</title>
 <style>
   .root-placeholder{}
   :root{
-    
-    --bg:#F2F6FC;          
-    --panel:#FFFFFF;       
-    --panel-2:#F7FAFF;     
-    --line:#DCE6F5;        
-    --line-2:#EAF1FB;      
-    --mg:#1668D6;          
+    /* 明亮仪器面板 —— 冷白底 + 蓝色信号 */
+    --bg:#F2F6FC;          /* 页面底 冷白 */
+    --panel:#FFFFFF;       /* 卡片 */
+    --panel-2:#F7FAFF;     /* 次级面板 */
+    --line:#DCE6F5;        /* 边框 */
+    --line-2:#EAF1FB;      /* 更浅分隔 */
+    --mg:#1668D6;          /* Mg²⁺ 主信号 深蓝 */
     --mg-soft:#E4EEFC;
     --mg-dim:#8FBAF0;
-    --li:#0E9AAE;          
+    --li:#0E9AAE;          /* Li⁺ 青蓝 */
     --li-soft:#DFF3F6;
     --li-dim:#79CBD7;
-    --ink:#12243D;         
+    --ink:#12243D;         /* 主文字 深蓝黑 */
     --ink-2:#33496B;
-    --muted:#55688A;       
+    --muted:#55688A;       /* 次要文字（对比度达 AA） */
     --ok:#15845C; --warn:#C2410C;
     --radius:10px;
     --display:"Segoe UI Variable Display","PingFang SC","Microsoft YaHei",sans-serif;
@@ -33,7 +33,7 @@
   body{margin:0;background:var(--bg);color:var(--ink);
     font-family:var(--sans);font-size:15px;line-height:1.55}
 
-
+/* ===== 页眉：蓝底 + 离子输运带（签名元素）===== */
   header{background:linear-gradient(135deg,#0E4C9E 0%,#1668D6 55%,#1B7FD6 100%);
     position:relative;overflow:hidden}
   .wrap{max-width:1180px;margin:0 auto;padding:0 26px}
@@ -115,7 +115,7 @@
   .btn.sec:hover{background:var(--mg-soft);box-shadow:none}
   .hint{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.5}
 
-  
+  /* ===== 结果区 ===== */
   .placeholder{color:var(--muted);padding:44px 20px;text-align:center;font-size:13.5px}
   .placeholder .icon{font-size:26px;display:block;margin-bottom:10px;opacity:.5;color:var(--mg-dim)}
   .res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px;margin-bottom:16px}
@@ -140,7 +140,7 @@
   .range .lab{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);
     margin-top:4px;font-family:var(--mono)}
 
-  
+  /* Score */
   .score-box{border:1px solid var(--mg);border-radius:var(--radius);padding:20px 24px;
     background:linear-gradient(135deg,#FFFFFF 55%,var(--mg-soft));
     display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
@@ -149,7 +149,7 @@
     line-height:1.05;font-family:var(--display);color:var(--mg);letter-spacing:-.02em}
   .score-note{font-size:11.5px;color:var(--muted);margin-top:9px;max-width:260px;line-height:1.5}
 
-  
+  /* ===== 表格 ===== */
   .tbl-wrap{overflow-x:auto}
   table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
   th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line-2)}
@@ -163,7 +163,7 @@
     border-radius:4px;background:#EDF3FC;border:1px solid var(--line);
     font-family:var(--mono);font-size:11px;color:var(--muted)}
   tr.top .rank-badge{background:var(--mg);color:#FFF;border-color:var(--mg)}
-  
+  /* 单体名称单元格：允许换行完整显示 */
   td.smiles{font-family:var(--mono);font-size:10.5px;line-height:1.45;
     white-space:normal;word-break:break-all;max-width:280px;color:var(--ink-2)}
   td.smiles .mname{display:block;font-family:var(--sans);font-size:12px;
@@ -173,7 +173,7 @@
   .src-tag.ds{background:var(--li-soft);color:#0A6D7C}
   .src-tag.lib{background:#F3EAFB;color:#7A3FA8}
 
-  
+  /* 重要性 / SHAP 条 */
   .imp-row{display:flex;align-items:center;gap:12px;margin-bottom:7px}
   .imp-row .lbl{width:200px;font-size:11.5px;text-align:right;font-family:var(--mono);
     color:var(--ink);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -194,56 +194,27 @@
     .imp-row .lbl{width:120px}
     td.smiles{max-width:180px}
   }
-  
-  .language-toggle{position:absolute;right:0;top:0;display:flex;align-items:center;gap:8px;font-size:12px;color:#DCEBFF}
-  .language-toggle a{color:#FFFFFF;text-decoration:none;border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:4px 9px;font-weight:700}
-  .language-toggle a:hover{background:rgba(255,255,255,.12)}
-  .language-toggle span{font-weight:700;color:#FFFFFF}
-  .row2 .field{display:flex;flex-direction:column}
-  .row2 .field label{min-height:36px;display:flex;align-items:flex-end}
-  .row2 .field input,.row2 .field select{margin-top:auto}
-  @media(max-width:520px){.row2{gap:10px}.row2 .field label{font-size:11px;min-height:34px}.language-toggle{position:static;margin-bottom:12px;justify-content:flex-end}}
-  
-  .language-toggle{position:absolute;right:0;top:0;display:flex;align-items:center;gap:8px;font-size:12px;color:#DCEBFF}
-  .language-toggle a{color:#FFFFFF;text-decoration:none;border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:4px 9px;font-weight:700}
-  .language-toggle a:hover{background:rgba(255,255,255,.12)}
-  .language-toggle span{font-weight:700;color:#FFFFFF}
-  .row2 .field{display:flex;flex-direction:column}
-  .row2 .field label{min-height:36px;display:flex;align-items:flex-end}
-  .row2 .field input,.row2 .field select{margin-top:auto}
-  body{background:#F5F7FB}
-  header{min-height:220px;background:radial-gradient(circle at 80% 20%,rgba(88,196,255,.28),transparent 26%),linear-gradient(120deg,#0A2E6E 0%,#1457B5 52%,#0F75B8 100%)}
-  header::before{content:"";position:absolute;inset:0;opacity:.35;background-image:linear-gradient(rgba(255,255,255,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.10) 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(90deg,#000 0%,transparent 75%)}
-  header .wrap{padding-top:34px;padding-bottom:32px;min-height:220px}
-  .hero-copy{max-width:690px;position:relative;z-index:2}
-  .eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:10px;letter-spacing:.13em}
-  .eyebrow::before{content:"AI";display:inline-flex;align-items:center;justify-content:center;width:25px;height:17px;border:1px solid rgba(255,255,255,.55);border-radius:4px;font-size:9px;letter-spacing:0;color:#DDF5FF;font-weight:800}
-  h1{font-size:clamp(31px,3vw,46px);line-height:1.08;margin-bottom:9px;letter-spacing:-.02em}
-  .sub{font-size:14px;max-width:610px;line-height:1.6}
-  .ion-legend{margin-top:15px}
-  .verify-strip{display:inline-flex;background:rgba(3,24,67,.24);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 11px;margin-top:16px}
-  .model-path{position:absolute;right:0;top:45px;width:350px;display:flex;align-items:center;justify-content:flex-end;gap:8px;z-index:2}
-  .model-step{width:94px;min-height:78px;padding:12px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.10);backdrop-filter:blur(5px);color:#FFF;text-align:center}
-  .model-step b{display:block;font-size:10px;letter-spacing:.12em;color:#AEEAFF;margin-bottom:6px}.model-step span{font-size:11px;font-weight:700;line-height:1.25;display:block}
-  .model-arrow{font-size:18px;color:#BEEFFF;opacity:.9}
-  nav{background:rgba(255,255,255,.97)}.tab{padding:14px 17px;font-size:13px}
-  .card{border-radius:14px;padding:24px;box-shadow:0 6px 18px rgba(22,54,98,.06)}
-  .card h2{font-size:16px}.field{margin-bottom:14px}input,select{border-radius:8px;padding:10px 12px}.row2{gap:13px}
-  @media(max-width:980px){.model-path{opacity:.45;right:18px;transform:scale(.85);transform-origin:top right}.hero-copy{max-width:610px}}
-  @media(max-width:700px){header,header .wrap{min-height:auto}.model-path{display:none}.hero-copy{max-width:none}}
-  @media(max-width:520px){.row2{gap:10px}.row2 .field label{font-size:11px;min-height:34px}.language-toggle{position:static;margin-bottom:12px;justify-content:flex-end}}
   </style>
-</head><body>
+<style>
+      .language-toggle{position:absolute;right:26px;top:20px;z-index:3;display:flex;gap:7px;align-items:center;font-size:12px}
+      .language-toggle a,.language-toggle span{color:rgba(255,255,255,.92);text-decoration:none;padding:3px 7px;border-radius:4px}
+      .language-toggle a{border:1px solid rgba(255,255,255,.42)}.language-toggle a:hover{background:rgba(255,255,255,.13)}
+      .language-toggle span{font-weight:700}@media(max-width:560px){.language-toggle{right:12px;top:11px;font-size:11px}header .wrap{padding-top:46px}}
+    </style></head>
+<body>
+
 <header>
-  <div class="wrap">
-    <div class="language-toggle"><span>English</span><a href="/static/index_zh.html">简体中文</a></div>
-    <div class="hero-copy"><div class="eyebrow">ML-POWERED · SALT-LAKE BRINE</div>
-      <h1>Nanofiltration Intelligence Platform</h1>
-      <div class="sub">AI-guided prediction for Mg²⁺/Li⁺ separation performance, translating membrane recipes and operating conditions into actionable research evidence.</div>
-      <div class="ion-legend"><span><i class="dot mg"></i>Mg²⁺ retention</span><span><i class="dot li"></i>Li⁺ permeability</span></div>
-      <div class="verify-strip" id="verify-status" role="status" aria-live="polite"><i class="verify-dot"></i><span>Checking service status...</span></div>
+  <div class="wrap"><div class="language-toggle"><span>English</span><a href="/static/index_zh.html">简体中文</a></div>
+    <div class="eyebrow">Nanofiltration Prediction · Salt-Lake Brine</div>
+    <h1>Nanofiltration Prediction Platform</h1>
+    <div class="sub">Enter membrane recipes and operating conditions to predict five separation-performance indicators, prediction intervals, Mg/Li balance scores, and promising monomers.</div>
+    <div class="ion-legend">
+      <span><i class="dot mg"></i>Mg²⁺ retained</span>
+      <span><i class="dot li"></i>Li⁺ permeated</span>
     </div>
-    <div class="model-path" aria-label="Machine learning workflow"><div class="model-step"><b>INPUT</b><span>Recipe</span></div><div class="model-arrow">→</div><div class="model-step"><b>STAGE 1</b><span>Characterization</span></div><div class="model-arrow">→</div><div class="model-step"><b>STAGE 2</b><span>Performance</span></div></div>
+    <div class="verify-strip" id="verify-status" role="status" aria-live="polite">
+      <i class="verify-dot"></i><span>Checking service and two-stage model status…</span>
+    </div>
   </div>
 </header>
 
@@ -257,61 +228,403 @@
 </div></div></nav>
 
 <main><div class="wrap">
-  <section class="panel active" id="panel-predict"><div class="grid">
-    <div class="card">
-      <h2>Membrane Recipe Input</h2>
-      <div class="field"><label>Base membrane</label><select id="membrane"></select></div>
-      <div class="field"><label>Aqueous monomer SMILES (polyamine)</label><select id="smi1"></select></div>
-      <div class="field"><label>Organic monomer SMILES (acyl chloride)</label><select id="smi2"></select></div>
-      <div class="row2"><div class="field"><label>D₁ aqueous concentration (wt%)</label><input id="d1" type="number" step="0.05" value="0.5"></div><div class="field"><label>T₁ immersion time (s)</label><input id="t1" type="number" value="120"></div></div>
-      <div class="row2"><div class="field"><label>D₂ organic concentration (wt%)</label><input id="d2" type="number" step="0.05" value="0.15"></div><div class="field"><label>T₂ reaction time (s)</label><input id="t2" type="number" value="60"></div></div>
-      <div class="row2"><div class="field"><label>Water contact angle (°)</label><input id="wca" type="number" placeholder="Optional"></div><div class="field"><label>Zeta potential (mV)</label><input id="zeta" type="number" placeholder="Optional"></div></div>
-      <div class="row2"><div class="field"><label>Mean pore diameter (nm)</label><input id="pore" type="number" step="0.01" placeholder="Optional"></div><div class="field"><label>MWCO (Da)</label><input id="mwco" type="number" placeholder="Optional"></div></div>
-      <div class="row2"><div class="field"><label>Thickness (nm)</label><input id="thick" type="number" placeholder="Optional"></div><div class="field"><label>Pressure (bar)</label><input id="press" type="number" value="5"></div></div>
-      <div class="field"><label>Feed concentration (ppm)</label><input id="feed" type="number" value="1000"></div>
-      <label style="display:flex;align-items:center;gap:8px;margin:10px 0 4px;font-family:var(--sans);text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--ink);cursor:pointer"><input type="checkbox" id="two-stage" style="width:auto;margin:0" checked>Two-stage mode: predict missing membrane characterization from the recipe</label>
-      <button class="btn" onclick="doPredict()">Predict Performance</button>
-      <div class="hint">When two-stage mode is enabled, blank characterization values are supplied by the stage-1 recipe-to-characterization model. Manually entered values always take priority.</div>
+
+  <!-- ============ Recipe Prediction ============ -->
+  <div class="panel active" id="panel-predict">
+    <div class="grid">
+      <div class="card">
+        <h2>Membrane Recipe Input</h2>
+        <div class="field"><label>Base membrane</label><select id="membrane"></select></div>
+        <div class="field"><label>Aqueous monomer SMILES (polyamine)</label><select id="smi1"></select></div>
+        <div class="field"><label>Organic monomer SMILES (acyl chloride)</label><select id="smi2"></select></div>
+        <div class="row2">
+          <div class="field"><label>D₁ aqueous concentration (wt%)</label><input id="d1" type="number" step="0.05" value="0.5"></div>
+          <div class="field"><label>T₁ immersion time (s)</label><input id="t1" type="number" value="120"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>D₂ organic concentration (wt%)</label><input id="d2" type="number" step="0.05" value="0.15"></div>
+          <div class="field"><label>T₂ reaction time (s)</label><input id="t2" type="number" value="60"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>WCA (°)</label><input id="wca" type="number" placeholder="Optional"></div>
+          <div class="field"><label>Zeta potential (mV)</label><input id="zeta" type="number" placeholder="Optional"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Mean pore diameter (nm)</label><input id="pore" type="number" step="0.01" placeholder="Optional"></div>
+          <div class="field"><label>MWCO (Da)</label><input id="mwco" type="number" placeholder="Optional"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Thickness (nm)</label><input id="thick" type="number" placeholder="Optional"></div>
+          <div class="field"><label>Pressure (bar)</label><input id="press" type="number" value="5"></div>
+        </div>
+        <div class="field"><label>Feed concentration (ppm)</label><input id="feed" type="number" value="1000"></div>
+        <label style="display:flex;align-items:center;gap:8px;margin:10px 0 4px;font-family:var(--sans);text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--ink);cursor:pointer">
+          <input type="checkbox" id="two-stage" style="width:auto;margin:0" checked>
+          Two-stage mode: predict membrane characterization from the recipe
+        </label>
+        <button class="btn" onclick="doPredict()">Predict Performance</button>
+        <div class="hint">With two-stage mode enabled, blank characterization values are predicted by the recipe-to-characterization stage. Manually entered values always take priority.</div>
+      </div>
+
+      <div class="card">
+        <h2>Prediction Results</h2>
+        <div id="pred-out">
+          <div class="placeholder"><span class="icon">⬡</span>Enter a recipe and select "Predict Performance" to view results and prediction intervals.</div>
+        </div>
+      </div>
     </div>
-    <div class="card"><h2>Prediction Results</h2><div id="pred-out"><div class="placeholder"><span class="icon">⬡</span>Enter a recipe and select <b>Predict Performance</b> to view results and prediction intervals.</div></div></div>
-  </div></section>
+  </div>
 
-  <section class="panel" id="panel-screen"><div class="card" style="margin-bottom:20px">
-    <h2>Batch Screening Range</h2><div class="note">This analysis keeps the selected monomers and membrane context from Recipe Prediction fixed, then screens the synthesis-condition grid.</div>
-    <div class="row2" style="grid-template-columns:1fr 1fr 1fr 1fr 90px"><div class="field"><label>D₁ aqueous wt%</label><input id="s-d1" value="0.2, 0.5, 1.0, 1.5, 2.0"></div><div class="field"><label>D₂ organic wt%</label><input id="s-d2" value="0.10, 0.15, 0.20, 0.30"></div><div class="field"><label>T₁ immersion (s)</label><input id="s-t1" value="60, 120, 300"></div><div class="field"><label>T₂ reaction (s)</label><input id="s-t2" value="30, 60, 120"></div><div class="field"><label>Top-N</label><input id="s-topn" type="number" value="15"></div></div>
-    <button class="btn sec" style="max-width:220px" onclick="doScreen()">Run Screening</button>
-  </div><div class="card"><div id="screen-out"><div class="placeholder"><span class="icon">≣</span>Set the screening range, then run the analysis to rank recipes by composite score.</div></div></div></section>
+  <!-- ============ Batch Screening ============ -->
+  <div class="panel" id="panel-screen">
+    <div class="card" style="margin-bottom:20px">
+      <h2>Screening range (using the current Recipe Prediction context)</h2>
+      <div class="row2" style="grid-template-columns:1fr 1fr 1fr 1fr 90px">
+        <div class="field"><label>D₁ aqueous concentration (wt%)</label><input id="s-d1" value="0.2, 0.5, 1.0, 1.5, 2.0"></div>
+        <div class="field"><label>D₂ organic concentration (wt%)</label><input id="s-d2" value="0.10, 0.15, 0.20, 0.30"></div>
+        <div class="field"><label>T₁ aqueous immersion (s)</label><input id="s-t1" value="60, 120, 300"></div>
+        <div class="field"><label>T₂ interfacial reaction (s)</label><input id="s-t2" value="30, 60, 120"></div>
+        <div class="field"><label>Top-N</label><input id="s-topn" type="number" value="15"></div>
+      </div>
+      <button class="btn sec" style="max-width:220px" onclick="doScreen()">Run Screening</button>
+    </div>
+    <div class="card"><div id="screen-out">
+      <div class="placeholder"><span class="icon">≣</span>Set a screening range and select "Run Screening" to rank the best recipe-condition combinations by score.</div>
+    </div></div>
+  </div>
 
-  <section class="panel" id="panel-monomers"><div class="card" style="margin-bottom:20px">
-    <h2>Virtual Screening of Promising Monomers</h2><div class="note">Evaluate candidate amine and acyl-chloride pairs over a synthesis-condition grid. Results are model-guided priorities and require experimental validation.</div>
-    <div class="row2" style="grid-template-columns:1fr 1fr 1fr 1fr"><div class="field"><label>Base membrane</label><select id="mn-base"></select></div><div class="field"><label>Zeta potential (mV)</label><input id="mn-zeta" type="number" value="14"></div><div class="field"><label>Mean pore diameter (nm)</label><input id="mn-pore" type="number" step="0.01" value="0.40"></div><div class="field"><label>Top-N</label><input id="mn-topn" type="number" value="15"></div></div>
-    <button class="btn sec" style="max-width:260px" onclick="doMonomerScreen()">Run Monomer Screening</button>
-  </div><div class="card"><div id="monomer-out"><div class="placeholder"><span class="icon">⬡</span>Run monomer screening to rank candidate monomer pairs by Mg/Li balance score.</div></div></div></section>
+  <!-- ============ Monomer Screening ============ -->
+  <div class="panel" id="panel-monomers">
+    <div class="card" style="margin-bottom:20px">
+      <h2>Virtual Screening of Promising Monomers</h2>
+      <div style="font-size:12.5px;color:var(--muted);margin-bottom:14px;line-height:1.6">
+        Evaluate all curated candidate monomers (N-containing amines in the aqueous phase and acyl chlorides in the organic phase). For each pair, the synthesis grid (D₁ × D₂ × T₁) is screened and its best score is retained. Default characterization context: Zeta = 14 mV, pore diameter = 0.40 nm, MWCO = 360 Da.
+      </div>
+      <div class="row2" style="grid-template-columns:1fr 1fr 1fr 1fr">
+        <div class="field"><label>Base membrane</label><select id="mn-base"></select></div>
+        <div class="field"><label>Zeta potential (mV)</label><input id="mn-zeta" type="number" value="14"></div>
+        <div class="field"><label>Mean pore diameter (nm)</label><input id="mn-pore" type="number" step="0.01" value="0.40"></div>
+        <div class="field"><label>Top-N</label><input id="mn-topn" type="number" value="15"></div>
+      </div>
+      <button class="btn sec" style="max-width:260px" onclick="doMonomerScreen()">Run Monomer Screening</button>
+    </div>
+    <div class="card"><div id="monomer-out">
+      <div class="placeholder"><span class="icon">⬡</span>Select "Run Monomer Screening" to rank all candidate monomer pairs by Mg/Li balance score.</div>
+    </div></div>
+  </div>
 
-  <section class="panel" id="panel-importance"><div class="card"><h2>Permutation Feature Importance</h2><div class="field" style="max-width:280px"><label>Select target</label><select id="imp-target" onchange="renderImportance()"></select></div><div id="imp-out"></div><div class="note">Values indicate the mean decrease in model R² after randomly permuting a feature. Larger values indicate greater model dependence.</div></div></section>
-  <section class="panel" id="panel-shap"><div class="card"><h2>SHAP Feature Contribution Analysis</h2><div class="field" style="max-width:280px"><label>Select target</label><select id="shap-target" onchange="renderShap()"></select></div><div id="shap-out"></div><div class="note">SHAP values represent mean absolute feature contributions to the model output. Blue indicates a positive direction and red indicates a negative direction in the modelled output space.</div></div></section>
-  <section class="panel" id="panel-metrics"><div class="card"><h2>Model Performance</h2><table><thead><tr><th>Target</th><th>Records</th><th>Unique recipes</th><th>CV R²</th><th>Test R²</th><th>RMSE</th><th>MAE</th><th>Selected model</th></tr></thead><tbody id="metrics-body"></tbody></table><div class="note">CV R² is based on group-aware cross-validation. Test R² is reported from repeated hold-out evaluation. Interpret model estimates together with their prediction intervals and experimental constraints.</div></div></section>
-  <footer>Models are selected by cross-validation from ExtraTrees, HistGBR, RandomForest, and weighted blends. The Mg/Li balance score combines Mg²⁺ rejection quality, Li⁺ permeability quality, flux, and pure-water permeability.</footer>
+  <!-- ============ Feature Importance ============ -->
+  <div class="panel" id="panel-importance">
+    <div class="card">
+      <h2>Permutation Feature Importance</h2>
+      <div class="field" style="max-width:280px">
+        <label>Select target</label>
+        <select id="imp-target" onchange="renderImportance()"></select>
+      </div>
+      <div id="imp-out"></div>
+      <div class="note">Values indicate the mean decrease in model R² after randomly permuting a feature. Larger values indicate greater model dependence.</div>
+    </div>
+  </div>
+
+  <!-- ============ SHAP Analysis ============ -->
+  <div class="panel" id="panel-shap">
+    <div class="card">
+      <h2>SHAP Feature Contribution Analysis</h2>
+      <div class="field" style="max-width:280px">
+        <label>Select target</label>
+        <select id="shap-target" onchange="renderShap()"></select>
+      </div>
+      <div id="shap-out"></div>
+      <div class="note">
+        SHAP values show mean absolute feature contributions. Blue indicates a positive direction and red indicates a negative direction. Rejection targets are modelled in log(100 − R) space, so their directional interpretation is reversed.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Model Performance ============ -->
+  <div class="panel" id="panel-metrics">
+    <div class="card">
+      <h2>Model Performance</h2>
+      <table><thead><tr>
+        <th>Target</th><th>Records</th><th>Recipes</th>
+        <th>Cross-validation R²</th><th>Test R²</th><th>RMSE</th><th>MAE</th><th>Selected model</th>
+      </tr></thead><tbody id="metrics-body"></tbody></table><div class="note"><b>Cross-validation R²</b> is based on five-fold cross-validation. <b>Test R²</b> is averaged across five 20% hold-out splits. MAE is reported on the original scale. Interpret every estimate together with its prediction-interval width and experimental constraints.</div>
+    </div>
+  </div>
+
+  <footer>Models are selected by cross-validation from ExtraTrees, HistGBR, RandomForest, and weighted blends; prediction intervals are obtained by quantile regression.<br>Mg/Li balance score = 0.80 × harmonic mean(Mg²⁺ rejection quality, Li⁺ permeability quality) + 0.12 × flux term + 0.08 × PWP term.</footer>
+
 </div></main>
 
 <script>
-const TARGET_META = {PWP:{label:"Pure-water permeability (PWP)",unit:"LMH/bar",cls:"",max:45},Mg_rej:{label:"Mg²⁺ rejection",unit:"%",cls:"mg",max:100},Flux_Mg:{label:"Mg²⁺ flux",unit:"LMH",cls:"mg",max:50},Li_rej:{label:"Li⁺ rejection",unit:"%",cls:"li",max:100},Flux_Li:{label:"Li⁺ flux",unit:"LMH",cls:"li",max:50}};
+const TARGET_META = {
+  PWP:{label:"Pure-water permeability (PWP)",unit:"LMH/bar",cls:"",max:45},
+  Mg_rej:{label:"Mg²⁺ rejection",unit:"%",cls:"mg",max:100},
+  Flux_Mg:{label:"Mg²⁺ flux",unit:"LMH",cls:"mg",max:50},
+  Li_rej:{label:"Li⁺ rejection",unit:"%",cls:"li",max:100},
+  Flux_Li:{label:"Li⁺ flux",unit:"LMH",cls:"li",max:50},
+};
 const ORDER = ["Mg_rej","Li_rej","Flux_Mg","Flux_Li","PWP"];
-document.querySelectorAll(".tab").forEach(t=>{const activate=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));t.classList.add("active");document.getElementById("panel-"+t.dataset.tab).classList.add("active")};t.onclick=activate;t.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();activate()}}});
-const byId=id=>document.getElementById(id); const number=id=>{const v=byId(id).value;return v===""?null:Number(v)};
-function gatherInput(){return {Foundational_Membrane:byId("membrane").value,SMILES_part1:byId("smi1").value,SMILES_part2:byId("smi2").value,Density_part1:number("d1"),Covered_Time_1:number("t1"),Density_part2:number("d2"),Covered_Time_2:number("t2"),WCA:number("wca"),Zeta_Potential:number("zeta"),Average_pore_diameter:number("pore"),MWCO:number("mwco"),Thickness:number("thick"),Pressure:number("press"),Feed:number("feed"),two_stage:byId("two-stage").checked}}
-function errorBox(message){return '<div class="placeholder">'+message+'</div>'}
-function rangeBar(p,max){const lo=100*Math.max(0,Math.min(max,p.lo))/max,hi=100*Math.max(0,Math.min(max,p.hi))/max,value=100*Math.max(0,Math.min(max,p.value))/max;return '<div class="range"><div class="track"><span class="band" style="left:'+lo+'%;width:'+Math.max(1,hi-lo)+'%"></span><span class="pin" style="left:calc('+value+'% - 1px)"></span></div><div class="lab"><span>'+p.lo+'</span><span>10–90% interval</span><span>'+p.hi+'</span></div></div>'}
-async function request(path,body){const response=await fetch(path,{method:body?"POST":"GET",headers:body?{"Content-Type":"application/json"}:undefined,body:body?JSON.stringify(body):undefined});if(!response.ok)throw new Error(await response.text()||response.statusText);return response.json()}
-async function loadOptions(){const o=await request("/api/options");const fill=(id,items)=>byId(id).innerHTML=items.map(v=>'<option>'+v+'</option>').join("");fill("membrane",o.membranes);fill("smi1",o.smiles_aq);fill("smi2",o.smiles_org);fill("mn-base",o.membranes);["imp-target","shap-target"].forEach(id=>byId(id).innerHTML=ORDER.map(k=>'<option value="'+k+'">'+TARGET_META[k].label+'</option>').join(""))}
-async function loadHealth(){const el=byId("verify-status");try{const d=await request("/api/health");el.classList.add("ok");el.querySelector("span").textContent=d.two_stage_available?"Service online · two-stage model ready":"Service online · preparing the two-stage model"}catch(e){el.querySelector("span").textContent="Service unavailable · refresh after startup is complete"}}
-async function doPredict(){const out=byId("pred-out");out.innerHTML=errorBox("Predicting, please wait...");try{const d=await request("/api/predict",gatherInput());let h=d.char_source==="stage1"?'<div class="note" style="margin:0 0 14px;border-left-color:var(--li)"><b style="color:var(--li)">Two-stage prediction:</b> blank characterization inputs were predicted from the recipe by the stage-1 model.</div>':'';h+='<div class="res-grid">';for(const k of ORDER){const m=TARGET_META[k],p=d.predictions[k];h+='<div class="metric '+m.cls+'"><div class="name">'+m.label+'</div><div class="val">'+p.value+'<span class="unit">'+m.unit+'</span></div>'+rangeBar(p,m.max)+'</div>'}h+='</div><div class="score-box"><div><div class="klabel">Mg/Li balance separation score (0–1)</div><div class="big">'+d.composite_score+'</div></div><div style="text-align:right"><div style="font-size:13px"><span style="color:var(--mg);font-weight:700">Mg²⁺ rejection quality '+d.mg_quality+'</span> · <span style="color:var(--li);font-weight:700">Li⁺ permeability quality '+d.li_quality+'</span></div><div class="score-note">The separation term is a harmonic mean: a weak Mg²⁺ or Li⁺ result lowers the overall score.</div></div></div>';out.innerHTML=h}catch(e){out.innerHTML=errorBox("Prediction failed: "+e.message)}}
-const list=id=>byId(id).value.split(",").map(Number).filter(Number.isFinite);
-async function doScreen(){const out=byId("screen-out");out.innerHTML=errorBox("Screening, please wait...");try{const d=await request("/api/screen",{base:gatherInput(),D1_list:list("s-d1"),D2_list:list("s-d2"),T1_list:list("s-t1"),T2_list:list("s-t2"),top_n:Number(byId("s-topn").value)||15});let h='<div class="note">Evaluated <b>'+d.n_total+'</b> recipe-condition sets. Results are ranked by Mg/Li balance score.</div><div class="tbl-wrap"><table><thead><tr><th>Rank</th><th>D₁ wt%</th><th>D₂ wt%</th><th>T₁ s</th><th>T₂ s</th><th>Mg²⁺ %</th><th>Li⁺ %</th><th>Flux Mg</th><th>Score</th></tr></thead><tbody>';d.results.forEach((x,i)=>h+='<tr class="'+(i===0?'top':'')+'"><td><span class="rank-badge">'+(i+1)+'</span></td><td>'+x.D1+'</td><td>'+x.D2+'</td><td>'+x.T1+'</td><td>'+x.T2+'</td><td>'+x.Mg_rej+'</td><td>'+x.Li_rej+'</td><td>'+x.Flux_Mg+'</td><td><b>'+x.score+'</b></td></tr>');out.innerHTML=h+'</tbody></table></div>'}catch(e){out.innerHTML=errorBox("Screening failed: "+e.message)}}
-async function doMonomerScreen(){const out=byId("monomer-out");out.innerHTML=errorBox("Screening monomer combinations, please wait...");try{const d=await request("/api/screen_monomers",{Foundational_Membrane:byId("mn-base").value,Zeta_Potential:Number(byId("mn-zeta").value)||14,Average_pore_diameter:Number(byId("mn-pore").value)||0.40,top_n:Number(byId("mn-topn").value)||15});let h='<div class="note">Evaluated <b>'+d.n_pairs+'</b> monomer pairs and '+d.n_combinations+' recipe conditions. Results are model-guided priorities and require experimental validation.</div><div class="tbl-wrap"><table><thead><tr><th>Rank</th><th>Aqueous monomer</th><th>Organic monomer</th><th>Mg²⁺ %</th><th>Li⁺ %</th><th>Best D₁/D₂/T₁/T₂</th><th>Score</th></tr></thead><tbody>';d.results.forEach((x,i)=>h+='<tr class="'+(i===0?'top':'')+'"><td><span class="rank-badge">'+(i+1)+'</span></td><td class="smiles">'+x.aq+'</td><td class="smiles">'+x.org+'</td><td>'+x.Mg_rej+'</td><td>'+x.Li_rej+'</td><td>'+x.best_D1+' / '+x.best_D2+' / '+x.best_T1+' / '+x.best_T2+'</td><td><b>'+x.score+'</b></td></tr>');out.innerHTML=h+'</tbody></table></div>'}catch(e){out.innerHTML=errorBox("Monomer screening failed: "+e.message)}}
-let IMP_DATA=null,SHAP_DATA=null;async function renderImportance(){try{IMP_DATA=IMP_DATA||await request("/api/importance");const rows=IMP_DATA[byId("imp-target").value]||[],max=Math.max(...rows.map(r=>r.importance),1e-9);byId("imp-out").innerHTML=rows.length?rows.map(r=>'<div class="imp-row"><div class="lbl" title="'+r.feature+'">'+r.feature+'</div><div class="track"><i style="width:'+100*r.importance/max+'%"></i></div><div class="num">'+r.importance.toFixed(4)+'</div></div>').join(""):errorBox("No feature-importance data are available for this target.")}catch(e){byId("imp-out").innerHTML=errorBox("Feature-importance data failed to load.")}}
-async function renderShap(){try{SHAP_DATA=SHAP_DATA||await request("/api/shap");const rows=SHAP_DATA[byId("shap-target").value]||[],max=Math.max(...rows.map(r=>Math.abs(r.mean_abs_shap)),1e-9);byId("shap-out").innerHTML=rows.length?rows.map(r=>'<div class="imp-row"><div class="lbl" title="'+r.feature+'">'+r.feature+'</div><div class="track"><i class="'+((r.direction_corr??r.mean_shap??0)>=0?'pos':'neg')+'" style="width:'+100*Math.abs(r.mean_abs_shap)/max+'%"></i></div><div class="num">'+r.mean_abs_shap.toFixed(4)+'</div></div>').join(""):errorBox("No SHAP data are available for this target.")}catch(e){byId("shap-out").innerHTML=errorBox("SHAP data failed to load.")}}
-async function loadMetrics(){try{const m=await request("/api/metrics"),f3=v=>Number(v).toFixed(3),f2=v=>Number(v).toFixed(2);byId("metrics-body").innerHTML=ORDER.map(k=>{const x=m[k];return x?'<tr><td>'+TARGET_META[k].label+'</td><td>'+x.n+'</td><td>'+x.n_groups+'</td><td>'+f3(x.CV_R2)+'</td><td>'+f3(x.Test_R2)+'</td><td>'+f2(x.RMSE)+'</td><td>'+f2(x.MAE)+'</td><td>'+x.model+'</td></tr>':''}).join("")}catch(e){byId("metrics-body").innerHTML='<tr><td colspan="8">Metrics unavailable.</td></tr>'}}
-(async()=>{await loadHealth();await loadOptions();await loadMetrics();await renderImportance();await renderShap()})().catch(console.error);
+
+document.querySelectorAll(".tab").forEach(t=>{
+  const act=()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    document.getElementById("panel-"+t.dataset.tab).classList.add("active");
+  };
+  t.onclick=act;
+  t.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act();}};
+});
+
+async function loadOptions(){
+  const o = await (await fetch("/api/options")).json();
+  const fill=(id,arr)=>{document.getElementById(id).innerHTML=
+    arr.map(v=>`<option>${v}</option>`).join("");};
+  fill("membrane",o.membranes); fill("smi1",o.smiles_aq); fill("smi2",o.smiles_org);
+  document.getElementById("imp-target").innerHTML=
+    ORDER.map(k=>`<option value="${k}">${TARGET_META[k].label}</option>`).join("");
+}
+
+async function loadHealth(){
+  const el=document.getElementById("verify-status");
+  try{
+    const r=await fetch("/api/health");
+    if(!r.ok) throw new Error("health check failed");
+    const d=await r.json();
+    el.classList.add("ok");
+    el.querySelector("span").textContent=
+      d.two_stage_available ? "Service online · two-stage model ready" : "Service online · preparing two-stage model";
+  }catch(e){
+    el.querySelector("span").textContent="Service unavailable · refresh after startup";
+  }
+}
+
+function gatherInput(){
+  const num=id=>{const v=document.getElementById(id).value;return v===""?null:parseFloat(v);};
+  return {
+    Foundational_Membrane:document.getElementById("membrane").value,
+    SMILES_part1:document.getElementById("smi1").value,
+    SMILES_part2:document.getElementById("smi2").value,
+    Density_part1:num("d1"), Covered_Time_1:num("t1"),
+    Density_part2:num("d2"), Covered_Time_2:num("t2"),
+    WCA:num("wca"), Zeta_Potential:num("zeta"),
+    Average_pore_diameter:num("pore"), MWCO:num("mwco"),
+    Thickness:num("thick"), Pressure:num("press"), Feed:num("feed"),
+    two_stage:document.getElementById("two-stage")?document.getElementById("two-stage").checked:false
+  };
+}
+
+function rangeBar(p,max,cls){
+  const l=100*Math.max(0,Math.min(max,p.lo))/max,
+        h=100*Math.max(0,Math.min(max,p.hi))/max,
+        v=100*Math.max(0,Math.min(max,p.value))/max;
+  return `<div class="range">
+    <div class="track">
+      <span class="band" style="left:${l}%;width:${Math.max(1,h-l)}%"></span>
+      <span class="pin" style="left:calc(${v}% - 1px)"></span>
+    </div>
+    <div class="lab"><span>${p.lo}</span><span>Interval 10–90%</span><span>${p.hi}</span></div>
+  </div>`;
+}
+
+async function doPredict(){
+  const out=document.getElementById("pred-out");
+  out.innerHTML='<div class="placeholder">Predicting, please wait…</div>';
+  let r;
+  try{
+    r=await fetch("/api/predict",{method:"POST",
+      headers:{"Content-Type":"application/json"},body:JSON.stringify(gatherInput())});
+  }catch(e){
+    out.innerHTML=`<div class="placeholder">Network error: ${e.message}. Please confirm that the service is running.</div>`;return;
+  }
+  if(!r.ok){out.innerHTML=`<div class="placeholder">Error: ${await r.text()}</div>`;return;}
+  const d=await r.json();
+  let h="";
+  if(d.char_source==="stage1"){
+    h+=`<div class="note" style="margin:0 0 14px;border-left-color:var(--li)">
+      <b style="color:var(--li)">Two-stage prediction</b>：Missing membrane-characterization values were supplied by the recipe-to-characterization stage-1 model. 
+      This is a forward prediction from the recipe.</div>`;
+  }
+  h+='<div class="res-grid">';
+  for(const k of ORDER){
+    const m=TARGET_META[k], p=d.predictions[k];
+    h+=`<div class="metric ${m.cls}">
+      <div class="name">${m.label}</div>
+      <div class="val">${p.value}<span class="unit">${m.unit}</span></div>
+      ${rangeBar(p,m.max,m.cls)}
+    </div>`;
+  }
+  h+='</div>';
+  h+=`<div class="score-box">
+    <div>
+      <div class="klabel">Mg/Li balance separation score（0–1）</div>
+      <div class="big">${d.composite_score}</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:13px;font-variant-numeric:tabular-nums">
+        <span style="color:var(--mg);font-weight:700">Mg²⁺ rejection quality ${d.mg_quality}</span>
+        &nbsp;·&nbsp;
+        <span style="color:var(--li);font-weight:700">Li⁺ permeability quality ${d.li_quality}</span>
+      </div>
+      <div class="score-note">The separation term is the harmonic mean（${d.separation_balance}）——a weak result in either term lowers the overall score.</div>
+    </div>
+  </div>`;
+  out.innerHTML=h;
+}
+
+function parseList(id){return document.getElementById(id).value.split(",")
+  .map(x=>parseFloat(x.trim())).filter(x=>!isNaN(x));}
+
+async function doScreen(){
+  const out=document.getElementById("screen-out");
+  out.innerHTML='<div class="placeholder">Screening, please wait…</div>';
+  const body={base:gatherInput(),D1_list:parseList("s-d1"),D2_list:parseList("s-d2"),
+    T1_list:parseList("s-t1"),T2_list:parseList("s-t2"),
+    top_n:parseInt(document.getElementById("s-topn").value)||15};
+  let r;
+  try{
+    r=await fetch("/api/screen",{method:"POST",
+      headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  }catch(e){
+    out.innerHTML=`<div class="placeholder">Network error: ${e.message}</div>`;return;
+  }
+  if(!r.ok){out.innerHTML=`<div class="placeholder">Error: ${await r.text()}</div>`;return;}
+  let d;
+  try{ d=await r.json(); }
+  catch(e){ out.innerHTML=`<div class="placeholder">Unable to parse returned data: ${e.message}</div>`;return; }
+  try{
+    let h=`<div style="font-size:13px;color:var(--muted);margin-bottom:12px">
+      Evaluated <b>${d.n_total}</b> recipe-condition sets (D₁ × D₂ × T₁ × T₂), ranked by Mg/Li balance score; showing the top ${d.results.length}.</div>`;
+    h+='<div class="tbl-wrap"><table><thead><tr><th>Rank</th><th>D₁ wt%</th><th>D₂ wt%</th><th>T₁ s</th><th>T₂ s</th>'
+      +'<th>Mg²⁺ %</th><th>Li⁺ %</th><th>Flux Mg</th><th>Score</th></tr></thead><tbody>';
+    d.results.forEach((x,i)=>{
+      h+=`<tr class="${i===0?'top':''}">
+        <td><span class="rank-badge">${i+1}</span></td>
+        <td>${x.D1}</td><td>${x.D2}</td><td>${x.T1}</td><td>${x.T2}</td>
+        <td>${x.Mg_rej}</td><td>${x.Li_rej}</td><td>${x.Flux_Mg}</td>
+        <td><b>${x.score}</b></td></tr>`;
+    });
+    h+='</tbody></table></div>';
+    h+=`<div class="note" style="margin-top:14px">Screening keeps the monomers and membrane characterization selected in Recipe Prediction fixed. 
+      Only synthesis conditions vary. Use Monomer Screening to compare monomers.</div>`;
+    out.innerHTML=h;
+  }catch(e){
+    out.innerHTML=`<div class="placeholder">Rendering error: ${e.message}</div>`;
+  }
+}
+
+async function doMonomerScreen(){
+  const out=document.getElementById("monomer-out");
+  out.innerHTML='<div class="placeholder">Screening monomer pairs and synthesis-condition grid…</div>';
+  const body={Foundational_Membrane:document.getElementById("mn-base").value,
+    Zeta_Potential:parseFloat(document.getElementById("mn-zeta").value)||14,
+    Average_pore_diameter:parseFloat(document.getElementById("mn-pore").value)||0.40,
+    top_n:parseInt(document.getElementById("mn-topn").value)||15};
+  let r;
+  try{
+    r=await fetch("/api/screen_monomers",{method:"POST",
+      headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  }catch(e){out.innerHTML=`<div class="placeholder">Network error: ${e.message}</div>`;return;}
+  if(!r.ok){out.innerHTML=`<div class="placeholder">Error: ${await r.text()}</div>`;return;}
+  const d=await r.json();
+  let h=`<div style="font-size:13px;color:var(--muted);margin-bottom:12px">
+    Evaluated <b>${d.n_pairs}</b> monomer pairs（${d.n_aq} amines × ${d.n_org} acyl chlorides），for a total of ${d.n_combinations} recipe conditions; the best grid point is retained for each pair.
+    <span class="src-tag ds">Dataset</span> indicates the monomer appears in the training data. 
+    <span class="src-tag lib">Extended library</span> contains literature-common monomers; predictions are extrapolations with lower confidence.</div>`;
+  h+='<div class="tbl-wrap"><table><thead><tr><th>Rank</th><th>Aqueous monomer</th><th>Organic monomer</th>'
+    +'<th>Mg²⁺ %</th><th>Li⁺ %</th><th>Best D₁/D₂/T₁/T₂</th><th>Score</th></tr></thead><tbody>';
+  d.results.forEach((x,i)=>{
+    const aqTag = x.aq_in_dataset ? '<span class="src-tag ds">Dataset</span>' : '<span class="src-tag lib">Extended library</span>';
+    const orgTag = x.org_in_dataset ? '<span class="src-tag ds">Dataset</span>' : '<span class="src-tag lib">Extended library</span>';
+    const aqName = x.aq_name ? `<span class="mname">${x.aq_name}${aqTag}</span>` : aqTag;
+    const orgName = x.org_name ? `<span class="mname">${x.org_name}${orgTag}</span>` : orgTag;
+    h+=`<tr class="${i===0?'top':''}">
+      <td><span class="rank-badge">${i+1}</span></td>
+      <td class="smiles">${aqName}${x.aq}</td>
+      <td class="smiles">${orgName}${x.org}</td>
+      <td>${x.Mg_rej}</td><td>${x.Li_rej}</td>
+      <td>${x.best_D1} / ${x.best_D2} / ${x.best_T1} / ${x.best_T2}</td>
+      <td><b>${x.score}</b></td></tr>`;
+  });
+  h+='</tbody></table></div>';
+  h+='<div style="margin-top:20px;font-weight:600;font-size:13.5px">Aqueous amine potential ranking (best-pair score)</div>';
+  const maxs=Math.max(...d.aq_ranking.map(a=>a.best_score),1e-9);
+  d.aq_ranking.forEach(a=>{
+    const nm = a.aq_name ? a.aq_name.split("｜")[0] : a.aq.slice(0,18);
+    h+=`<div class="imp-row" style="margin-top:7px">
+      <div class="lbl" title="${a.aq}">${nm}</div>
+      <div class="track"><i style="width:${100*a.best_score/maxs}%"></i></div>
+      <div class="num">${a.best_score.toFixed(3)} · Mg≈${Math.round(a.best_mg)}%</div>
+    </div>`;
+  });
+  const tsNote = d.two_stage
+    ? '<b style="color:var(--li)">Two-stage screening (self-consistent):</b> membrane characterization for each monomer pair is predicted individually by the recipe-to-characterization stage-1 model, so it changes with the monomer choice.'
+    : '<b>Interpretation note: </b>Screening uses a common membrane-characterization context, rather than actual characterization for each monomer.';
+  h+=`<div class="note" style="margin-top:14px">${tsNote}
+    Results still require experimental validation. The current predicted Mg²⁺ rejection upper bound is about ${Math.round(Math.max(...d.results.map(x=>parseFloat(x.Mg_rej))))}%，and no pair is stably predicted at ≥95%.</div>`;
+  out.innerHTML=h;
+}
+
+let SHAP_DATA=null;
+async function renderShap(){
+  if(!SHAP_DATA){
+    try{ SHAP_DATA=await (await fetch("/api/shap")).json(); }
+    catch(e){ document.getElementById("shap-out").innerHTML=
+      '<div class="placeholder">SHAP data failed to load. Retrain the model to generate shap.json.</div>'; return; }
+  }
+  const k=document.getElementById("shap-target").value;
+  const rows=(SHAP_DATA[k]||[]);
+  if(!rows.length){document.getElementById("shap-out").innerHTML=
+    '<div class="placeholder">No SHAP data are available for this target.</div>';return;}
+  const max=Math.max(...rows.map(r=>Math.abs(r.mean_abs_shap)),1e-9);
+  document.getElementById("shap-out").innerHTML=rows.map(r=>`
+    <div class="imp-row">
+      <div class="lbl" title="${r.feature}">${r.feature}</div>
+      <div class="track"><i class="${(r.direction_corr!==undefined?r.direction_corr:(r.mean_shap||0))>=0?'pos':'neg'}" style="width:${100*Math.abs(r.mean_abs_shap)/max}%"></i></div>
+      <div class="num">${r.mean_abs_shap.toFixed(4)}</div>
+    </div>`).join("");
+}
+
+let IMP_DATA=null;
+async function renderImportance(){
+  if(!IMP_DATA) IMP_DATA=await (await fetch("/api/importance")).json();
+  const k=document.getElementById("imp-target").value;
+  const rows=IMP_DATA[k]||[];
+  if(!rows.length){document.getElementById("imp-out").innerHTML=
+    '<div class="placeholder">No feature-importance data are available for this target.</div>';return;}
+  const max=Math.max(...rows.map(r=>r.importance),1e-9);
+  document.getElementById("imp-out").innerHTML=rows.map(r=>`
+    <div class="imp-row">
+      <div class="lbl" title="${r.feature}">${r.feature}</div>
+      <div class="track"><i style="width:${100*r.importance/max}%"></i></div>
+      <div class="num">${r.importance.toFixed(4)}</div>
+    </div>`).join("");
+}
+
+async function loadMetrics(){
+  const m=await (await fetch("/api/metrics")).json();
+  document.getElementById("metrics-body").innerHTML=ORDER.map(k=>{
+    const x=m[k]; if(!x) return "";
+    const f3=v=>Number(v).toFixed(3), f2=v=>Number(v).toFixed(2);
+    return `<tr><td>${TARGET_META[k].label}</td><td>${x.n}</td>
+      <td>${x.n_groups}</td><td>${f3(x.CV_R2)}</td><td>${f3(x.Test_R2)}</td>
+      <td>${f2(x.RMSE)}</td><td>${x.MAE!==undefined?f2(x.MAE):'—'}</td><td>${x.model||'—'}</td></tr>`;
+  }).join("");
+}
+
+(async()=>{ 
+  try{
+    await loadHealth(); await loadOptions(); await loadMetrics(); await renderImportance();
+    // 单体筛选:Base membrane下拉复用 options
+    const o=await (await fetch("/api/options")).json();
+    document.getElementById("mn-base").innerHTML=o.membranes.map(v=>`<option>${v}</option>`).join("");
+    // SHAP Target下拉
+    document.getElementById("shap-target").innerHTML=
+      ORDER.map(k=>`<option value="${k}">${TARGET_META[k].label}</option>`).join("");
+    await renderShap();
+  }catch(e){ console.error(e); }
+})();
 </script>
-</body></html>
+</body>
+</html>
